@@ -1,0 +1,101 @@
+{
+  "last_build_time": 1786971832918,
+  "last_update_time": 1786971832918,
+  "last_bal_toml_update_time": 1785825624453,
+  "distribution_version": "2201.13.5",
+  "last_modified_time": {
+    "library_client": 1786971787073
+  },
+  "last_build_options": {
+    "compilationOptions": {
+      "dumpBir": false,
+      "dumpGraph": false,
+      "dumpRawGraphs": false
+    }
+  },
+  "src_meta_info": [
+    {
+      "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_client\\asset_crud.bal",
+      "hash": "c74927803b67be107c031c0710e3320dcd1cf1f5ba48ceaf509bfa73b49b4662",
+      "size": 5041,
+      "lastModifiedTime": 1785825624416
+    },
+    {
+      "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_client\\asset_views.bal",
+      "hash": "8202f29766586f28557f64e546351621e7da0a1dbbc6f3a44ef37f7da063dffa",
+      "size": 4030,
+      "lastModifiedTime": 1785825624441
+    },
+    {
+      "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_client\\Ballerina.toml",
+      "hash": "c31700985e50bbe07c4751532cf6d189d76956d055925a8a68fcea56b9ecade3",
+      "size": 69,
+      "lastModifiedTime": 1785825624453
+    },
+    {
+      "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_client\\http_helpers.bal",
+      "hash": "1c9b28fb3fd7836b8d4727259e87db1692fe6e3e995a3ba8effd1b7241346711",
+      "size": 1461,
+      "lastModifiedTime": 1785825624490
+    },
+    {
+      "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_client\\input_helpers.bal",
+      "hash": "4231038b21358bd7aec3c659641054bd47d826b108a3de5d4a8bbf4a90982bcd",
+      "size": 3179,
+      "lastModifiedTime": 1786971787073
+    },
+    {
+      "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_client\\institution_menu.bal",
+      "hash": "c82f2cc8ae64a815e65a0b37a6c17661f478c511c9084267d3c85e090f0c8000",
+      "size": 3256,
+      "lastModifiedTime": 1785825624520
+    },
+    {
+      "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_client\\loan_booking.bal",
+      "hash": "3feaac9fca9f4efcb07631544124f6a9dc3a4de3d059f20b90a493ea1fe9e918",
+      "size": 2715,
+      "lastModifiedTime": 1785825624536
+    },
+    {
+      "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_client\\main.bal",
+      "hash": "5115b14cb09ee3bd553f93a106a7eb8e7bb2aa8b6be632773ebad9796d1c0445",
+      "size": 1788,
+      "lastModifiedTime": 1785825624553
+    },
+    {
+      "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_client\\pickers.bal",
+      "hash": "00ada13c43a30bcd9a3adbb74090ad64bcf126d417ab73e7add7c58aa11dacb2",
+      "size": 7300,
+      "lastModifiedTime": 1785825624568
+    },
+    {
+      "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_client\\schedule_menu.bal",
+      "hash": "4a52be7d0afabe139874602be87c9ccb659517070a02b9b216274bac801af950",
+      "size": 4233,
+      "lastModifiedTime": 1785825624582
+    }
+  ],
+  "target_exec_meta_info": {
+    "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_client\\target\\backup\\bin\\library_client.jar",
+    "hash": "f26111de758a0cc292ffc6128a8520ee2d6af7e149c5a925a5c39f068a06f3c0",
+    "size": 47526956,
+    "lastModifiedTime": 1786971834136
+  },
+  "settings_meta_info": {
+    "file": "C:\\Users\\Charmaine.Musheko\\.ballerina\\Settings.toml",
+    "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size": 0,
+    "lastModifiedTime": 1785835338240
+  },
+  "ballerina_toml_meta_info": {
+    "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_client\\Ballerina.toml",
+    "hash": "c31700985e50bbe07c4751532cf6d189d76956d055925a8a68fcea56b9ecade3",
+    "size": 69,
+    "lastModifiedTime": 1785825624453
+  },
+  "imports": [
+    "ballerina/http",
+    "ballerina/io",
+    "ballerina/time"
+  ]
+}

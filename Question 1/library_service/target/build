@@ -1,0 +1,106 @@
+{
+  "last_build_time": 1786971807093,
+  "last_update_time": 1786971807093,
+  "last_bal_toml_update_time": 1785825625822,
+  "distribution_version": "2201.13.5",
+  "last_modified_time": {
+    "library_service": 1786971751389
+  },
+  "last_build_options": {
+    "compilationOptions": {
+      "dumpBir": false,
+      "dumpGraph": false,
+      "dumpRawGraphs": false
+    }
+  },
+  "src_meta_info": [
+    {
+      "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_service\\asset_handlers.bal",
+      "hash": "e27d20111da7e6582dd103994e066d6875eb65294f9072b038c87076e08dd854",
+      "size": 2991,
+      "lastModifiedTime": 1785825625805
+    },
+    {
+      "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_service\\Ballerina.toml",
+      "hash": "58f36b937fb7d882ea6c7b81c919b5a80c184da874efd1511002794a723d4a21",
+      "size": 70,
+      "lastModifiedTime": 1785825625822
+    },
+    {
+      "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_service\\component_handlers.bal",
+      "hash": "86cfdf985d4368f73b2c812e2f9dc0c0717f1406704beeaf9dc3fa83c58373c6",
+      "size": 1639,
+      "lastModifiedTime": 1786971750074
+    },
+    {
+      "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_service\\data_init.bal",
+      "hash": "c03ac15ec7c9145e8d04d7a73428bba87fe8ce5ff2381c5a6dcdba7a7ab023ff",
+      "size": 3623,
+      "lastModifiedTime": 1785825625851
+    },
+    {
+      "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_service\\institution_handlers.bal",
+      "hash": "3983c3d03fe9e7f4c9b802c54508b12d95d5a190ece99b000aaaa67ce576e87c",
+      "size": 2579,
+      "lastModifiedTime": 1785825625878
+    },
+    {
+      "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_service\\loan_handlers.bal",
+      "hash": "b573ddd1057d53d716ba3f109b526760bfb25ad641618c1c27b6881d6f4d1bce",
+      "size": 3151,
+      "lastModifiedTime": 1785825625891
+    },
+    {
+      "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_service\\schedule_handlers.bal",
+      "hash": "663a681933d960a25055f0c458ef0cb3673d9f57a857d1c3c53a988db936334c",
+      "size": 2655,
+      "lastModifiedTime": 1786971750505
+    },
+    {
+      "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_service\\service.bal",
+      "hash": "9573068d2dbad15ea8b1aaf6157cc7baaa9002381df67fa6fd35bdd0b605868c",
+      "size": 6027,
+      "lastModifiedTime": 1786971751389
+    },
+    {
+      "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_service\\storage.bal",
+      "hash": "77d08d24edcea4d63753c1b99399b30cf3c611fed740302a192f562dfa9229ff",
+      "size": 1018,
+      "lastModifiedTime": 1785825625928
+    },
+    {
+      "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_service\\types.bal",
+      "hash": "dff567cfafb52c7bbac2f58015d6e30c29085d57d7394880c42c51afc8a1de68",
+      "size": 1488,
+      "lastModifiedTime": 1785825625942
+    },
+    {
+      "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_service\\workorder_handlers.bal",
+      "hash": "f777401283f3fa2b8df412627b7ed42185ed7147195b0bd68d3f0274b30a6b3e",
+      "size": 5949,
+      "lastModifiedTime": 1786971750940
+    }
+  ],
+  "target_exec_meta_info": {
+    "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_service\\target\\backup\\bin\\library_service.jar",
+    "hash": "3a58c56d297d06f5a6b2c211299588e188ec648dbbf11c3f51dfabedb40edc4e",
+    "size": 47740250,
+    "lastModifiedTime": 1786971822986
+  },
+  "settings_meta_info": {
+    "file": "C:\\Users\\Charmaine.Musheko\\.ballerina\\Settings.toml",
+    "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size": 0,
+    "lastModifiedTime": 1785835338240
+  },
+  "ballerina_toml_meta_info": {
+    "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_service\\Ballerina.toml",
+    "hash": "58f36b937fb7d882ea6c7b81c919b5a80c184da874efd1511002794a723d4a21",
+    "size": 70,
+    "lastModifiedTime": 1785825625822
+  },
+  "imports": [
+    "ballerina/time",
+    "ballerina/http"
+  ]
+}
