@@ -2,7 +2,7 @@
 
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 
-type View = "overview" | "learning" | "assets" | "schedules" | "institutions";
+type View = "overview" | "assets" | "schedules" | "institutions";
 type AssetStatus = "AVAILABLE" | "LOANED_OUT" | "OCCUPIED" | "UNDER_MAINTENANCE" | "DISPOSED";
 type ComponentPart = { compId: string; name: string; description: string };
 type Schedule = { scheduleId: string; type: string; dueDate: string; description: string; status: "PENDING" | "COMPLETED" | "CANCELLED" };
@@ -11,11 +11,10 @@ type Asset = { assetTag: string; name: string; description: string; institution:
 type Institution = { name: string; sites: string[] };
 
 const navigation: { id: View; label: string; icon: string }[] = [
-  { id: "overview", label: "Dashboard", icon: "1" },
-  { id: "learning", label: "How it works", icon: "2" },
-  { id: "assets", label: "Assets", icon: "3" },
-  { id: "schedules", label: "Schedules", icon: "4" },
-  { id: "institutions", label: "Institutions", icon: "5" },
+  { id: "overview", label: "Overview", icon: "⌂" },
+  { id: "assets", label: "Assets", icon: "▦" },
+  { id: "schedules", label: "Schedules", icon: "□" },
+  { id: "institutions", label: "Institutions", icon: "◎" },
 ];
 
 const statusLabel: Record<AssetStatus, string> = {
@@ -98,9 +97,9 @@ export default function Home() {
   return (
     <main className="app-shell">
       <aside className="sidebar">
-        <div className="brand"><div className="brand-mark">Q1</div><div><strong>Library System</strong><span>DSA612S learning project</span></div></div>
+        <div className="brand"><div className="brand-mark">ML</div><div><strong>Ministry Library</strong><span>Resource network</span></div></div>
         <nav aria-label="Main navigation">
-          <p className="nav-label">Project pages</p>
+          <p className="nav-label">Workspace</p>
           {navigation.map((item) => (
             <button className={view === item.id ? "nav-item active" : "nav-item"} key={item.id} onClick={() => setView(item.id)}>
               <span className="nav-icon" aria-hidden="true">{item.icon}</span>{item.label}
@@ -108,20 +107,19 @@ export default function Home() {
             </button>
           ))}
         </nav>
-        <div className="sidebar-status"><span className={error ? "status-dot offline" : "status-dot"} /><div><strong>{error ? "Backend not running" : "Backend connected"}</strong><span>Ballerina service on port 8080</span></div></div>
+        <div className="sidebar-status"><span className={error ? "status-dot offline" : "status-dot"} /><div><strong>{error ? "Service unavailable" : "System connected"}</strong><span>Ballerina API · Port 8080</span></div></div>
       </aside>
 
       <section className="workspace">
         <header className="topbar">
-          <div><span className="eyebrow">Question 1 demonstration</span><h1>{sectionTitle}</h1></div>
-          <div className="topbar-actions"><button className="icon-button" onClick={loadData} aria-label="Refresh data">Refresh</button><button className="primary-button" onClick={() => setShowAssetForm(true)}>+ Add asset</button></div>
+          <div><span className="eyebrow">Ministry operations</span><h1>{sectionTitle}</h1></div>
+          <div className="topbar-actions"><button className="icon-button" onClick={loadData} aria-label="Refresh data">↻</button><button className="primary-button" onClick={() => setShowAssetForm(true)}><span aria-hidden="true">＋</span> Add asset</button><div className="avatar" title="Library administrator">LA</div></div>
         </header>
 
         {error && <div className="error-banner" role="alert"><div><strong>Cannot reach the library service.</strong><span>{error}</span></div><button onClick={loadData}>Try again</button></div>}
 
         {loading ? <LoadingState /> : <>
           {view === "overview" && <Overview assets={assets} overdueAssets={overdueAssets} institutions={institutions} onViewAsset={setSelectedAsset} onNavigate={setView} />}
-          {view === "learning" && <LearningGuide />}
           {view === "assets" && <AssetsView assets={filteredAssets} institutions={institutions} search={search} institutionFilter={institutionFilter} onSearch={setSearch} onFilter={setInstitutionFilter} onView={setSelectedAsset} onLoan={(asset) => setActivity({ asset, type: "loan" })} onBook={(asset) => setActivity({ asset, type: "book" })} />}
           {view === "schedules" && <SchedulesView schedules={allSchedules} assets={assets} onAdd={setScheduleAsset} />}
           {view === "institutions" && <InstitutionsView institutions={institutions} assets={assets} />}
@@ -132,7 +130,7 @@ export default function Home() {
       {showAssetForm && <AssetForm institutions={institutions} onClose={() => setShowAssetForm(false)} onSaved={async () => { setShowAssetForm(false); setToast("Asset added to the network"); await loadData(); }} />}
       {scheduleAsset && <ScheduleForm asset={scheduleAsset} onClose={() => setScheduleAsset(null)} onSaved={async () => { setScheduleAsset(null); setToast("Schedule added successfully"); await loadData(); }} />}
       {activity && <ActivityForm asset={activity.asset} type={activity.type} onClose={() => setActivity(null)} onSaved={async () => { const message = activity.type === "loan" ? "Asset loan recorded" : "Booking confirmed"; setActivity(null); setToast(message); await loadData(); }} />}
-      {toast && <div className="toast" role="status">Done: {toast}</div>}
+      {toast && <div className="toast" role="status">✓ {toast}</div>}
     </main>
   );
 }
@@ -145,52 +143,12 @@ function Overview({ assets, overdueAssets, institutions, onViewAsset, onNavigate
   const available = assets.filter((asset) => asset.status === "AVAILABLE").length;
   const inUse = assets.filter((asset) => ["LOANED_OUT", "OCCUPIED"].includes(asset.status)).length;
   return <div className="page-content">
-    <section className="welcome-panel"><div><span className="welcome-kicker">Inter-process communication example</span><h2>Library and Resource Management System</h2><p>This page is a simple client. It sends HTTP requests containing JSON to a Ballerina service, which reads or changes data in memory.</p><button className="lesson-link" onClick={() => onNavigate("learning")}>Study how the communication works</button></div></section>
+    <section className="welcome-panel"><div><span className="welcome-kicker">Distributed resource network</span><h2>Everything your campuses need, in one clear view.</h2><p>Track shared resources, respond to overdue items, and coordinate bookings across every institution.</p></div><div className="network-graphic" aria-hidden="true"><span className="node main-node">ML</span><span className="node node-one">NUST</span><span className="node node-two">UNAM</span><i className="line line-one" /><i className="line line-two" /></div></section>
     <section className="stats-grid" aria-label="Resource summary"><StatCard label="Total assets" value={assets.length} note={`${institutions.length} institutions`} tone="navy" /><StatCard label="Available now" value={available} note="Ready to use" tone="green" /><StatCard label="Currently in use" value={inUse} note="Loans and bookings" tone="blue" /><StatCard label="Overdue attention" value={overdueAssets.length} note="Action required" tone="orange" /></section>
     <div className="overview-grid">
-      <section className="panel"><div className="panel-heading"><div><span className="eyebrow">Data returned by GET /assets</span><h3>Sample assets</h3></div><button className="text-button" onClick={() => onNavigate("assets")}>View all</button></div><div className="asset-list">{assets.slice(0, 5).map((asset) => <button className="asset-list-row" key={asset.assetTag} onClick={() => onViewAsset(asset)}><AssetGlyph name={asset.name} /><span className="asset-main"><strong>{asset.name}</strong><small>{asset.assetTag} | {asset.site}</small></span><StatusPill status={asset.status} /><span className="row-arrow">Open</span></button>)}</div></section>
+      <section className="panel"><div className="panel-heading"><div><span className="eyebrow">Live inventory</span><h3>Recent assets</h3></div><button className="text-button" onClick={() => onNavigate("assets")}>View all →</button></div><div className="asset-list">{assets.slice(0, 5).map((asset) => <button className="asset-list-row" key={asset.assetTag} onClick={() => onViewAsset(asset)}><AssetGlyph name={asset.name} /><span className="asset-main"><strong>{asset.name}</strong><small>{asset.assetTag} · {asset.site}</small></span><StatusPill status={asset.status} /><span className="row-arrow">›</span></button>)}</div></section>
       <section className="panel attention-panel"><div className="panel-heading"><div><span className="eyebrow">Needs attention</span><h3>Overdue items</h3></div><span className="alert-count">{overdueAssets.length}</span></div>{overdueAssets.length === 0 ? <div className="empty-state"><span>✓</span><strong>Everything is on track</strong><p>No overdue schedules found.</p></div> : <div className="overdue-list">{overdueAssets.slice(0, 4).map((asset) => { const due = asset.schedules.find(isOverdue); return <button key={asset.assetTag} onClick={() => onViewAsset(asset)}><span className="alert-icon">!</span><span><strong>{asset.name}</strong><small>Due {due?.dueDate} · {due?.type}</small></span><span>›</span></button>; })}</div>}</section>
     </div>
-  </div>;
-}
-
-function LearningGuide() {
-  return <div className="page-content learning-page">
-    <section className="lesson-intro">
-      <span className="eyebrow">Week 3 concept: IPC</span>
-      <h2>What happens when a user clicks a button?</h2>
-      <p>The browser and the Ballerina service are separate processes. They cooperate by passing messages over HTTP.</p>
-    </section>
-
-    <section className="flow-lesson" aria-label="Request and response flow">
-      <article><strong>1. Client</strong><p>The React page collects input and calls <code>fetch()</code>.</p></article>
-      <span aria-hidden="true">-&gt;</span>
-      <article><strong>2. HTTP and JSON</strong><p>A method, route, headers, and optional JSON body form the message.</p></article>
-      <span aria-hidden="true">-&gt;</span>
-      <article><strong>3. Service</strong><p>Ballerina selects the matching resource function and validates the data.</p></article>
-      <span aria-hidden="true">-&gt;</span>
-      <article><strong>4. Storage</strong><p>The handler reads or updates an in-memory table and returns a response.</p></article>
-    </section>
-
-    <div className="learning-grid">
-      <section className="lesson-card">
-        <h3>Methods used in this project</h3>
-        <table className="study-table"><thead><tr><th>Action</th><th>Message</th><th>Meaning</th></tr></thead><tbody>
-          <tr><td>List assets</td><td><code>GET /assets</code></td><td>Read data</td></tr>
-          <tr><td>Add asset</td><td><code>POST /assets</code></td><td>Create data</td></tr>
-          <tr><td>Update asset</td><td><code>PUT /assets/tag</code></td><td>Replace data</td></tr>
-          <tr><td>Delete asset</td><td><code>DELETE /assets/tag</code></td><td>Remove data</td></tr>
-        </tbody></table>
-      </section>
-      <section className="lesson-card">
-        <h3>Questions I should be able to answer</h3>
-        <details><summary>Why is this IPC?</summary><p>The browser client and Ballerina server run independently and exchange messages through an API.</p></details>
-        <details><summary>Why use JSON?</summary><p>JSON provides a common representation that both TypeScript and Ballerina can serialize and understand.</p></details>
-        <details><summary>Why is assetTag important?</summary><p>It is the table key, so each asset can be found uniquely and duplicates are rejected.</p></details>
-        <details><summary>What happens after a restart?</summary><p>The sample data returns because storage is in memory. There is no permanent database in this version.</p></details>
-      </section>
-    </div>
-    <aside className="student-note"><strong>Important limitation:</strong> This is a teaching prototype. It demonstrates communication, records, tables, routes, validation, and error responses; it is not a production library platform.</aside>
   </div>;
 }
 
