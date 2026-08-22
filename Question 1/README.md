@@ -4,7 +4,7 @@ This is a simple Ballerina solution for Question 1 of the DSA612S assignment. It
 
 - `library_service`: the REST API and in-memory data storage
 - `library_client`: the command-line program used to call the API
-- `library_web`: a modern browser interface that uses the same REST API
+- `library_web`: an optional educational browser interface that demonstrates the same REST API
 
 The code is split into small files so that each part can be understood and retyped separately.
 
@@ -40,7 +40,7 @@ bal run
 
 The service runs at `http://localhost:8080/library`. The client displays a numbered menu, so no HTTP commands have to be typed manually.
 
-For the browser interface, open another terminal:
+For the optional browser learning interface, open another terminal:
 
 ```powershell
 cd library_web
@@ -49,6 +49,8 @@ npm run dev
 ```
 
 Open `http://localhost:3000`. Keep `library_service` running because the website gets all its data from the Ballerina API.
+
+Use the **How it works** page before demonstrating the features. It explains the client-to-service message flow and includes short questions that each group member should be able to answer.
 
 ## A good order for manually recoding it
 

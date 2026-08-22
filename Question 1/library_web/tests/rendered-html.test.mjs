@@ -11,13 +11,13 @@ async function render() {
   }, { waitUntil() {}, passThroughOnException() {} });
 }
 
-test("renders the ministry library dashboard", async () => {
+test("renders the educational library dashboard", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
   const html = await response.text();
-  assert.match(html, /Ministry Library Network/i);
-  assert.match(html, /Ministry Library/i);
+  assert.match(html, /DSA612S Library System - Learning Project/i);
+  assert.match(html, /How it works/i);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/i);
 });
 

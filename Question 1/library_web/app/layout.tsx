@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Ministry Library Network",
-  description: "Manage shared library resources, campus assets, loans, bookings, and schedules.",
+  title: "DSA612S Library System - Learning Project",
+  description: "A student demonstration of IPC between a web client and a Ballerina REST service.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
