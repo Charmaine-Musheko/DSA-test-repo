@@ -1,0 +1,430 @@
+
+===== PAGE 1 =====
+Namibia University of Science and Technology
+Week 2: Inter-Process Communication (IPC)
+Distributed Systems and Applications (DSA612S)
+HERMAN KANDJIMI
+Department of Software Engineering/CS
+Faculty of Computing and Informatics
+July 2026
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+1 / 29
+
+===== PAGE 2 =====
+What is IPC?
+Textbook Definition
+Communication between processes over the network, or inter- process
+communication (IPC), is at the heart of distributed systems — it’s what
+makes distributed systems distributed
+The exchange of data between two or more separate, independent
+processes or threads.
+Each process is an island with its own address space, code, and data.
+The Operating System (OS) provides the facilities to bridge these
+islands.
+The bridge can be considered as the Application programming
+interface(API) which allows for high level IPC programming.
+The API defines the set of rules that determine how data is
+processed and formatted throughout the communication.
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+2 / 29
+
+===== PAGE 3 =====
+IPC Overview - The Island Analogy
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+3 / 29
+
+===== PAGE 4 =====
+Why Do Processes Cooperate?
+Process in a Distributed Environment
+A process is an independent execution unit. In distributed systems,
+processes often run on different devices and communicate through
+message passing to coordinate their activities and achieve a common goal
+Reason
+Description
+Example
+Information Sharing
+Coordinated access to shared
+files or data
+Banking database
+Computation
+Speedup
+Utilizing multiple cores or ma-
+chines for parallel tasks
+Google Search
+Modularity/Reliability
+Designing systems as sets of
+processes where one can be
+replaced easily
+Netflix microservices
+Convenience
+Many tasks are expressed nat-
+urally as sets of interacting
+processes
+WhatsApp messaging
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+4 / 29
+
+===== PAGE 5 =====
+Two Main Models of IPC
+Shared Memory
+Message Passing
+Pros
+Fast(Low latency)
+Loose Coupling
+Efficient data sharing
+Safety from Concurrency Bugs
+Simple to manage
+Fault Isolation
+Cons
+Complex synchronisation
+Network delays
+Scalability limits
+Message loss
+Security/Access
+control(Lock
+contention and false sharing)
+Serialization overhead
+Examples
+HPC systems often solve one large problem by allowing many processes to work on the
+same data (shared memory). Distributed systems solve problems by allowing
+independent services running on different machines to communicate through
+messages (message passing). Apache Kafka is a popular example of message-passing
+middleware that acts as a bridge between distributed services.
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+5 / 29
+
+===== PAGE 6 =====
+Message Passing Fundamentals
+Read and Reflect
+What are the main purposes of the layers within the OSI model?
+Where do we place REST APIs and JSON serialization?
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+6 / 29
+
+===== PAGE 7 =====
+Ballerina Communication Model
+Read and Reflect
+Explain the presentation and Session layer within the Ballerina model?
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+7 / 29
+
+===== PAGE 8 =====
+How Do Processes Find Each Other?
+Read and Reflect
+Why do we need to use hostname when IP and port are already unique identifies?
+How do the services resolve when the port is not specified?
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+8 / 29
+
+===== PAGE 9 =====
+Message Format
+Header: Contains metadata (Message type, Source/Destination ID,
+Length, Sequence number, Priority)
+Body: The actual content or payload being transmitted
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+9 / 29
+
+===== PAGE 10 =====
+Communication Styles
+Direct communication: the sender communicates directly with the
+intended receiver. The sender must know the identity or address of
+the destination process or service before communication can occur.
+Indirect communication: processes exchange messages through an
+intermediary, such as a message broker, message queue, or event bus.
+Sender and receiver don’t need to be online at the same time.
+Feature
+Direct Communication
+Indirect Communication
+Communication
+Process-to-Process
+Process-to-Broker-to-Process
+Coupling
+Tight
+Loose
+Timing
+Usually synchronous
+Usually asynchronous
+Availability
+Both processes must be active
+Processes may execute independently
+Scalability
+Moderate
+High
+Fault
+Toler-
+ance
+Lower
+Higher
+Examples
+HTTP, gRPC, TCP
+Kafka, RabbitMQ, JMS
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+10 / 29
+
+===== PAGE 11 =====
+Communication Styles: Participants
+WhatsApp Channels
+Think about channels on WhatsApp, where would you classify them and what
+messaging model do they employ?
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+11 / 29
+
+===== PAGE 12 =====
+Why Multicast Matters?
+Replication: Updating multiple servers simultaneously.
+Service Discovery: Finding services automatically.
+Event Distribution: Sending updates to many subscribers.
+Fault Tolerance: Keeping replicas consistent.
+Read and Reflect
+What about the Broadcast model?
+How does it compare to the Multicast model?
+Can you list and describe sample use cases?
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+12 / 29
+
+===== PAGE 13 =====
+Communication Styles: Timing
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+13 / 29
+
+===== PAGE 14 =====
+Failure detection
+Indefinite Blocking: A process might ”hang” forever if a network link fails during
+a blocking call.
+Timeout: Returns a special error code if a process blocks for too long, allowing for
+recovery logic.
+Deadlock: Issuing blocking operations in the wrong sequence (e.g., P1 waiting for
+P2, and P2 waiting for P1).
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+14 / 29
+
+===== PAGE 15 =====
+Key IPC Design Questions
+When designing communication systems we must decide:
+Direct or indirect communication?
+- Host resolutions or naming issues
+Synchronous or asynchronous?
+- When is the responses/requests likely to arrive
+Buffered or unbuffered?
+- How is the communicated messages stored
+Fixed-size or variable-size messages?
+- Memory requirements and limits
+These choices affect:
+Performance
+Scalability
+Reliability
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+15 / 29
+
+===== PAGE 16 =====
+Buffering and Message Size
+Why Buffer Messages?
+Buffering allows messages to be:
+Stored temporarily
+Delivered later
+Processed asynchronously
+Benefits
+Absorbs bursts in traffic
+Improves performance
+Decouples sender and receiver
+Cost
+Additional memory usage
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+16 / 29
+
+===== PAGE 17 =====
+Message Representation and Transfer
+Applications communicate using high-level data structures, while computer
+networks only transmit binary data (bits and bytes).
+High level data structures: Objects, Records, Arrays, JSON
+documents, Classes and Structures
+The Representation Problem: Different architectures represent
+data differently.
+- Intel x86 vs AMD64 vs ARM (Apple Silicon, Raspberry Pi)
+The Challenge of Heterogeneity: communicating machines may
+differ in many ways.
+- Byte-ordering: Big-endian (UNIX SPARC) vs. Little-endian (Wintel).
+- Types: Differences in how characters (ASCII vs. Unicode) are encoded.
+- Numeric Formats: Integer sizes; Floating-point representation; Signed
+vs unsigned integers.
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+17 / 29
+
+===== PAGE 18 =====
+Marshalling
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+18 / 29
+
+===== PAGE 19 =====
+Modern Serialization Formats
+Text Formats:
+JSON
+- Human readable
+- Easy to debug
+- Larger messages
+XML
+- Self-describing
+- Verbose
+Binary Formats
+Protocol Buffers
+Apache Avro
+- Smaller messages
+- Faster processing
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+19 / 29
+
+===== PAGE 20 =====
+The Transport Layer in IPC
+The Transport Layer provides end-to-end communication between
+applications running on different hosts.
+This layer creates reliable communication channel on top of IP.
+Port numbers address specific processes or services on a host.
+Example of default ports:
+HTTP: 80
+HTTPS: 443
+MySQL: 3306
+Ballerina Service: 8080
+Communication can only happen if processes in IPC have an agreed
+protocol. TCP vs UDP
+TCP: Connection-oriented, reliable byte stream.
+UDP: Connectionless, ”best-effort” datagram service (fast but
+unreliable)
+Read and Reflect
+What are the example use cases for TCP and UDP?
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+20 / 29
+
+===== PAGE 21 =====
+How TCP Achieves Reliable Messaging?
+Segmentation: Large messages are divided into smaller TCP
+segments before transmission.
+Sequence Numbers: Every TCP segment receives a unique
+sequence number.
+Acknowledgements: Connection establishment uses three-way
+handshake.
+Retransmission:If no acknowledgement arrives before a timeout
+expires.
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+21 / 29
+
+===== PAGE 22 =====
+HTTP: Application Layer IPC
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+22 / 29
+
+===== PAGE 23 =====
+Beyond HTTP – RESTful
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+23 / 29
+
+===== PAGE 24 =====
+Beyond HTTP – API Gateway
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+24 / 29
+
+===== PAGE 25 =====
+Beyond HTTP – Remote Invocations
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+25 / 29
+
+===== PAGE 26 =====
+Beyond HTTP – Publish-Subscribe
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+26 / 29
+
+===== PAGE 27 =====
+Summary & Homework
+Takeaways
+IPC enables cooperation between independent processes.
+Message passing is the foundation of distributed systems.
+Communication can be:
+* Direct or indirect
+* Synchronous or asynchronous
+* Unicast or multicast
+Serialization enables heterogeneous systems to exchange data.
+Modern IPC technologies include:
+* TCP/IP
+* HTTP/REST
+* gRPC
+* Publish-Subscribe Systems
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+27 / 29
+
+===== PAGE 28 =====
+Further reading & Resources
+Listen to ”Inter-Process Communication (Deepdive)”
+IPC and Communication - https://jumpcloud.com/it-index/
+what-is-inter-process-communication-ipc
+— https://tinyurl.com/3xzh3fhx
+WhatsApp Channels -
+https://qualimero.com/en/blog/what-is-whatsapp-channel
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+28 / 29
+
+===== PAGE 29 =====
+Namibia University of Science and Technology
+Thank you for your attention
+Course Lecturers
+Mr. HERMAN KANDJIMI - hkandjimi@nust.na
+Mr. NAFTALI INDONGO - nindongo@nust.na
+Mr. ABRAHAM PELEMA - apelema@nust.na
+HERMAN KANDJIMI
+Inter-Process Communication (IPC)
+July 2026
+29 / 29

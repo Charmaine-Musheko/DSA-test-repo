@@ -7,7 +7,9 @@ public function main() returns error? {
     http:Client cl = check new (BASE_URL);
     boolean running = true;
 
-    io:println("Connected to Ministry Library / Resource Management API at " + BASE_URL);
+    io:println("Ballerina HTTP Client - Library System");
+    io:println("Server address: " + BASE_URL);
+    io:println("Each request and response will be printed for the demonstration.");
 
     while running {
         printMainMenu();
@@ -37,7 +39,7 @@ public function main() returns error? {
 }
 
 function printMainMenu() {
-    io:println("\n==================== MINISTRY LIBRARY / RESOURCE SYSTEM ====================");
+    io:println("\n================ LIBRARY CLIENT - STUDENT DEMO ================");
     io:println("1. Loan / Book / Return / Release an asset");
     io:println("2. Global view      - list ALL assets across the ministry");
     io:println("3. Campus view      - filter by institution / site");
@@ -46,5 +48,5 @@ function printMainMenu() {
     io:println("6. Asset management - create / view / update / delete");
     io:println("7. Institution management - add / remove institutions & sites");
     io:println("0. Exit");
-    io:println("==============================================================================");
+    io:println("================================================================");
 }

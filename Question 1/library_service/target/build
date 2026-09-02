@@ -1,14 +1,18 @@
 {
-  "last_build_time": 1786971807093,
-  "last_update_time": 1786971807093,
+  "last_build_time": 1788365525673,
+  "last_update_time": 1788365525673,
   "last_bal_toml_update_time": 1785825625822,
   "distribution_version": "2201.13.5",
   "last_modified_time": {
     "library_service": 1786971751389
   },
   "last_build_options": {
+    "testReport": false,
+    "codeCoverage": false,
+    "skipTests": true,
     "compilationOptions": {
-      "dumpBir": false,
+      "experimental": false,
+      "cloud": "",
       "dumpGraph": false,
       "dumpRawGraphs": false
     }
@@ -83,9 +87,9 @@
   ],
   "target_exec_meta_info": {
     "file": "C:\\Users\\Charmaine.Musheko\\Downloads\\Question 1\\Question 1\\library_service\\target\\backup\\bin\\library_service.jar",
-    "hash": "3a58c56d297d06f5a6b2c211299588e188ec648dbbf11c3f51dfabedb40edc4e",
-    "size": 47740250,
-    "lastModifiedTime": 1786971822986
+    "hash": "bb206e833a77f8bef82b3a10641733520f852b2ea80f1c4011fe3f66663c63db",
+    "size": 47740252,
+    "lastModifiedTime": 1788365538732
   },
   "settings_meta_info": {
     "file": "C:\\Users\\Charmaine.Musheko\\.ballerina\\Settings.toml",
