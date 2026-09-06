@@ -1,0 +1,4 @@
+[package]
+org = "ministry"
+name = "library_client"
+version = "0.1.0"
