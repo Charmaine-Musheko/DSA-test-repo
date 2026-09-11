@@ -14,6 +14,7 @@ function handleAddSchedule(string assetTag, Schedule sched) returns Asset|http:N
         return <http:NotFound>{body: <ErrorPayload>{message: string `Asset '${assetTag}' not found`}};
     }
     Asset a = found;
+    // Schedule IDs must be unique within a single asset.
     foreach Schedule s in a.schedules {
         if s.scheduleId == sched.scheduleId {
             return <http:Conflict>{body: <ErrorPayload>{message: string `Schedule '${sched.scheduleId}' already exists on this asset`}};
@@ -21,6 +22,7 @@ function handleAddSchedule(string assetTag, Schedule sched) returns Asset|http:N
     }
     a.schedules.push(sched);
     assetsTable.put(a);
+    safePersistAsset(a);
     return a;
 }
 
@@ -31,9 +33,11 @@ function handleUpdateSchedule(string assetTag, string scheduleId, Schedule updat
         return <http:NotFound>{body: <ErrorPayload>{message: string `Asset '${assetTag}' not found`}};
     }
     Asset a = found;
+    // Path ID and payload ID must agree; otherwise it's ambiguous which to trust.
     if updated.scheduleId != scheduleId {
         return <http:BadRequest>{body: <ErrorPayload>{message: "scheduleId in payload must match the path"}};
     }
+    // Rebuild the array, swapping the matching entry.
     Schedule[] newSchedules = [];
     boolean matched = false;
     foreach Schedule s in a.schedules {
@@ -49,6 +53,7 @@ function handleUpdateSchedule(string assetTag, string scheduleId, Schedule updat
     }
     a.schedules = newSchedules;
     assetsTable.put(a);
+    safePersistAsset(a);
     return a;
 }
 
@@ -58,6 +63,7 @@ function handleDeleteSchedule(string assetTag, string scheduleId) returns Asset|
         return <http:NotFound>{body: <ErrorPayload>{message: string `Asset '${assetTag}' not found`}};
     }
     Asset a = found;
+    // Detect missing schedules explicitly so we can return 404.
     boolean scheduleFound = false;
     foreach Schedule s in a.schedules {
         if s.scheduleId == scheduleId {
@@ -69,5 +75,8 @@ function handleDeleteSchedule(string assetTag, string scheduleId) returns Asset|
     }
     a.schedules = from Schedule s in a.schedules where s.scheduleId != scheduleId select s;
     assetsTable.put(a);
+    safePersistAsset(a);
     return a;
 }
+
+

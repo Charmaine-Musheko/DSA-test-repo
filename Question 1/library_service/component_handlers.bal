@@ -14,6 +14,7 @@ function handleAddComponent(string assetTag, Component comp) returns Asset|http:
         return <http:NotFound>{body: <ErrorPayload>{message: string `Asset '${assetTag}' not found`}};
     }
     Asset a = found;
+    // Component IDs must be unique within an asset (e.g. a printer can have only one motor labeled C101).
     foreach Component c in a.components {
         if c.compId == comp.compId {
             return <http:Conflict>{body: <ErrorPayload>{message: string `Component '${comp.compId}' already exists on this asset`}};
@@ -21,6 +22,7 @@ function handleAddComponent(string assetTag, Component comp) returns Asset|http:
     }
     a.components.push(comp);
     assetsTable.put(a);
+    safePersistAsset(a);
     return a;
 }
 
@@ -41,5 +43,8 @@ function handleDeleteComponent(string assetTag, string compId) returns Asset|htt
     }
     a.components = from Component c in a.components where c.compId != compId select c;
     assetsTable.put(a);
+    safePersistAsset(a);
     return a;
 }
+
+

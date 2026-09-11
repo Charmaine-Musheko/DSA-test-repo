@@ -90,3 +90,18 @@ The remaining `PUT` and `DELETE` routes for schedules, work orders, tasks, insti
 - An asset is overdue when it has a `PENDING` schedule whose `dueDate` is before today's date.
 
 Retype the code in your own working branch, test each menu option, and make sure every group member can explain the part they contributed.
+
+
+# Verify Seed data in Psql
+```shell
+PGPASSWORD='123@Librarian!' psql \
+  -h 127.0.0.1 -U library_service_user -d library_service_db \
+  -c "SELECT count(*) FROM institutions;" \
+  -c "SELECT count(*) FROM institution_sites;" \
+  -c "SELECT count(*) FROM assets;" \
+  -c "SELECT count(*) FROM components;" \
+  -c "SELECT count(*) FROM schedules;" \
+  -c "SELECT count(*) FROM work_orders;" \
+  -c "SELECT count(*) FROM work_tasks;"
+```
+

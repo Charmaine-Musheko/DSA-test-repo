@@ -60,10 +60,7 @@ OWNER library_service_user;
 
 3. Test the Access to db
 ```shell
-psql \
-  -h 127.0.0.1 \
-  -U library_service_user \
-  -d library_service_db
+psql -h 127.0.0.1 -U library_service_user -d library_service_db
 ```
 
 4. Show tables

@@ -21,10 +21,12 @@ function handleAddWorkOrder(string assetTag, WorkOrder wo) returns Asset|http:No
     }
     a.workOrders.push(wo);
 
+    // Opening a work order flips the asset into UNDER_MAINTENANCE so it can't be loaned out.
     if wo.status != "CLOSED" {
         a.status = "UNDER_MAINTENANCE";
     }
     assetsTable.put(a);
+    safePersistAsset(a);
     return a;
 }
 
@@ -52,7 +54,19 @@ function handleUpdateWorkOrder(string assetTag, string orderId, WorkOrder update
         return <http:NotFound>{body: <ErrorPayload>{message: string `Work order '${orderId}' not found on asset '${assetTag}'`}};
     }
     a.workOrders = newOrders;
+
+    // Recompute asset status: if every work order is CLOSED, release the asset back to AVAILABLE.
+    boolean anyOpen = false;
+    foreach WorkOrder w in a.workOrders {
+        if w.status != "CLOSED" {
+            anyOpen = true;
+        }
+    }
+    if !anyOpen && a.status == "UNDER_MAINTENANCE" {
+        a.status = "AVAILABLE";
+    }
     assetsTable.put(a);
+    safePersistAsset(a);
     return a;
 }
 
@@ -73,6 +87,7 @@ function handleDeleteWorkOrder(string assetTag, string orderId) returns Asset|ht
     }
     a.workOrders = from WorkOrder w in a.workOrders where w.orderId != orderId select w;
     assetsTable.put(a);
+    safePersistAsset(a);
     return a;
 }
 
@@ -86,6 +101,7 @@ function handleAddTask(string assetTag, string orderId, WorkTask t) returns Asse
     boolean matched = false;
     foreach WorkOrder w in a.workOrders {
         if w.orderId == orderId {
+            // Task IDs must be unique within one work order.
             foreach WorkTask existingTask in w.tasks {
                 if existingTask.taskId == t.taskId {
                     return <http:Conflict>{body: <ErrorPayload>{message: string `Task '${t.taskId}' already exists on work order '${orderId}'`}};
@@ -101,6 +117,7 @@ function handleAddTask(string assetTag, string orderId, WorkTask t) returns Asse
     }
     a.workOrders = newOrders;
     assetsTable.put(a);
+    safePersistAsset(a);
     return a;
 }
 
@@ -136,6 +153,7 @@ function handleUpdateTask(string assetTag, string orderId, string taskId, WorkTa
     }
     a.workOrders = newOrders;
     assetsTable.put(a);
+    safePersistAsset(a);
     return a;
 }
 
@@ -166,5 +184,7 @@ function handleDeleteTask(string assetTag, string orderId, string taskId) return
     }
     a.workOrders = newOrders;
     assetsTable.put(a);
+    safePersistAsset(a);
     return a;
 }
+
