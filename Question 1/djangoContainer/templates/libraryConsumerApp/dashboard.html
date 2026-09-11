@@ -1,0 +1,268 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Ministry Library Console</title>
+  <style>
+    :root { --bg:#0f172a; --panel:#1e293b; --line:#334155;
+            --fg:#e2e8f0; --muted:#94a3b8; --accent:#38bdf8;
+            --ok:#22c55e; --warn:#f59e0b; --bad:#ef4444; }
+    * { box-sizing: border-box; }
+    body { margin:0; font: 14px/1.5 system-ui, sans-serif;
+           background: var(--bg); color: var(--fg); }
+    header { padding: 16px 24px; border-bottom: 1px solid var(--line);
+             display:flex; justify-content:space-between; align-items:center; }
+    h1 { margin:0; font-size:18px; letter-spacing:.5px; }
+    nav button { background: var(--panel); color: var(--fg);
+                 border:1px solid var(--line); padding:6px 12px;
+                 border-radius:6px; cursor:pointer; margin-left:6px; }
+    nav button.active { border-color: var(--accent); color: var(--accent); }
+    main { padding: 24px; max-width: 1200px; margin: auto; }
+    .grid { display:grid; gap:12px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+    .card { background: var(--panel); border:1px solid var(--line);
+            border-radius:8px; padding:14px; }
+    .card h3 { margin:0 0 6px; font-size:15px; }
+    .tag { font-family: ui-monospace, monospace; color: var(--muted);
+           font-size:12px; }
+    .pill { display:inline-block; padding:2px 8px; border-radius:10px;
+            font-size:11px; font-weight:600; }
+    .AVAILABLE { background:#064e3b; color:#6ee7b7; }
+    .LOANED_OUT { background:#7c2d12; color:#fdba74; }
+    .OCCUPIED   { background:#1e3a8a; color:#93c5fd; }
+    .UNDER_MAINTENANCE { background:#78350f; color:#fcd34d; }
+    .DISPOSED   { background:#3f3f46; color:#d4d4d8; }
+    .actions { margin-top:10px; display:flex; flex-wrap:wrap; gap:6px; }
+    .actions button { background:transparent; border:1px solid var(--line);
+                      color: var(--fg); padding:4px 10px; border-radius:6px;
+                      cursor:pointer; font-size:12px; }
+    .actions button:hover { border-color: var(--accent); color: var(--accent); }
+    .muted { color: var(--muted); }
+    .toast { position:fixed; bottom:20px; right:20px; background:#0b1220;
+             border:1px solid var(--line); padding:10px 14px; border-radius:8px;
+             opacity:0; transition:.2s; }
+    .toast.show { opacity:1; }
+    .toast.error { border-color: var(--bad); }
+    input, select { background:#0b1220; color: var(--fg);
+                    border:1px solid var(--line); border-radius:6px;
+                    padding:6px 8px; font-size:13px; width:100%; }
+    .form-row { margin:6px 0; }
+    .form-row label { display:block; font-size:12px;
+                      color: var(--muted); margin-bottom:3px; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Ministry Library Console</h1>
+  <nav>
+    <button data-view="global" class="active">Global</button>
+    <button data-view="overdue">Overdue</button>
+    <button data-view="institutions">Institutions</button>
+  </nav>
+</header>
+
+<main>
+  <div id="institution-filter" class="card" style="margin-bottom:16px; display:none;">
+    <div class="form-row">
+      <label>Filter by institution</label>
+      <select id="inst-select"><option value="">All institutions</option></select>
+    </div>
+    <div class="form-row">
+      <label>Filter by site (optional)</label>
+      <input id="site-input" placeholder="e.g. Main Campus - Library">
+    </div>
+    <button onclick="applyFilter()">Apply</button>
+  </div>
+
+  <div id="view"></div>
+</main>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const API = "";  // same origin — Django proxies to Ballerina
+let currentView = "global";
+let institutions = [];
+
+function toast(msg, isError) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "toast show" + (isError ? " error" : "");
+  setTimeout(() => t.className = "toast", 2600);
+}
+
+async function getJSON(url) {
+  const r = await fetch(url);
+  const b = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(b.message || b.error || r.statusText);
+  return b;
+}
+
+async function postJSON(url, body) {
+  const r = await fetch(url, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body || {})
+  });
+  const b = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(b.message || b.error || r.statusText);
+  return b;
+}
+
+async function deleteJSON(url) {
+  const r = await fetch(url, { method: "DELETE" });
+  const b = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(b.message || b.error || r.statusText);
+  return b;
+}
+
+function pill(status) {
+  return `<span class="pill ${status}">${status}</span>`;
+}
+
+function assetCard(a) {
+  return `
+    <div class="card">
+      <h3>${a.name}</h3>
+      <div class="tag">${a.assetTag}</div>
+      <div class="muted">${a.institution} — ${a.site}</div>
+      <div style="margin-top:6px;">${pill(a.status)}</div>
+      <div class="actions">
+        ${a.status === "AVAILABLE"
+          ? `<button onclick="doLoan('${a.assetTag}')">Loan</button>
+             <button onclick="doBook('${a.assetTag}')">Book</button>`
+          : ""}
+        ${a.status === "LOANED_OUT"
+          ? `<button onclick="doReturn('${a.assetTag}')">Return</button>` : ""}
+        ${a.status === "OCCUPIED"
+          ? `<button onclick="doRelease('${a.assetTag}')">Release</button>` : ""}
+        <button onclick="showSchedules('${a.assetTag}')">Schedules</button>
+      </div>
+    </div>`;
+}
+
+function renderAssets(list) {
+  const v = document.getElementById("view");
+  if (!list.length) { v.innerHTML = `<p class="muted">No assets.</p>`; return; }
+  v.innerHTML = `<div class="grid">${list.map(assetCard).join("")}</div>`;
+}
+
+async function loadGlobal() {
+  try {
+    const data = await getJSON(API + "/api/assets/");
+    renderAssets(data);
+  } catch (e) { toast(e.message, true); }
+}
+
+async function loadOverdue() {
+  try {
+    const data = await getJSON(API + "/api/assets/overdue/");
+    renderAssets(data);
+  } catch (e) { toast(e.message, true); }
+}
+
+async function loadInstitutions() {
+  try {
+    institutions = await getJSON(API + "/api/institutions/");
+    const sel = document.getElementById("inst-select");
+    sel.innerHTML = `<option value="">All institutions</option>` +
+      institutions.map(i => `<option>${i.name}</option>`).join("");
+    const v = document.getElementById("view");
+    v.innerHTML = `<div class="grid">${
+      institutions.map(i => `
+        <div class="card">
+          <h3>${i.name}</h3>
+          <div class="muted">Sites:</div>
+          <ul>${i.sites.map(s => `<li>${s}</li>`).join("")}</ul>
+        </div>`).join("")
+    }</div>`;
+  } catch (e) { toast(e.message, true); }
+}
+
+function applyFilter() {
+  const inst = document.getElementById("inst-select").value;
+  const site = document.getElementById("site-input").value.trim();
+  if (!inst) { loadGlobal(); return; }
+  const url = site
+    ? `${API}/api/assets/institution/${encodeURIComponent(inst)}/site/${encodeURIComponent(site)}/`
+    : `${API}/api/assets/institution/${encodeURIComponent(inst)}/`;
+  getJSON(url).then(renderAssets).catch(e => toast(e.message, true));
+}
+
+async function doLoan(tag) {
+  const borrower = prompt("Borrower name:");
+  if (!borrower) return;
+  const dueDate = prompt("Due date (YYYY-MM-DD):");
+  if (!dueDate) return;
+  try {
+    await postJSON(`${API}/api/assets/${tag}/loan/`, {borrower, dueDate});
+    toast("Loaned " + tag);
+    refresh();
+  } catch (e) { toast(e.message, true); }
+}
+
+async function doReturn(tag) {
+  try {
+    await postJSON(`${API}/api/assets/${tag}/return/`, {});
+    toast("Returned " + tag);
+    refresh();
+  } catch (e) { toast(e.message, true); }
+}
+
+async function doBook(tag) {
+  const bookedBy = prompt("Booked by:");
+  if (!bookedBy) return;
+  const dueDate = prompt("Booking date (YYYY-MM-DD):");
+  if (!dueDate) return;
+  try {
+    await postJSON(`${API}/api/assets/${tag}/book/`, {bookedBy, dueDate});
+    toast("Booked " + tag);
+    refresh();
+  } catch (e) { toast(e.message, true); }
+}
+
+async function doRelease(tag) {
+  try {
+    await postJSON(`${API}/api/assets/${tag}/release/`, {});
+    toast("Released " + tag);
+    refresh();
+  } catch (e) { toast(e.message, true); }
+}
+
+async function showSchedules(tag) {
+  try {
+    const list = await getJSON(`${API}/api/assets/${tag}/schedules/`);
+    const text = list.length
+      ? list.map(s => `${s.scheduleId}  ${s.type}  due ${s.dueDate}  [${s.status}]  ${s.description}`).join("\n")
+      : "(no schedules)";
+    alert(text);
+  } catch (e) { toast(e.message, true); }
+}
+
+function refresh() {
+  if (currentView === "global") loadGlobal();
+  else if (currentView === "overdue") loadOverdue();
+  else loadInstitutions();
+}
+
+document.querySelectorAll("nav button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentView = btn.dataset.view;
+    document.getElementById("institution-filter").style.display =
+      currentView === "global" ? "block" : "none";
+    refresh();
+  });
+});
+
+// Initial load
+document.getElementById("institution-filter").style.display = "block";
+loadGlobal();
+loadInstitutions();
+</script>
+</body>
+</html>
+
+
