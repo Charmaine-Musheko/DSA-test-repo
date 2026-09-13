@@ -1,6 +1,8 @@
 from django.shortcuts import render
 
 from .grpc_client import list_available_properties
+from .grpc_generated import rental_pb2
+from .grpc_generated import rental_pb2_grpc
 import grpc
 from django.contrib import messages
 from django.shortcuts import render, redirect

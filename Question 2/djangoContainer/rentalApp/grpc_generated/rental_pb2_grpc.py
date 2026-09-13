@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-import rental_pb2 as rental__pb2
+from . import rental_pb2 as rental__pb2
 
 GRPC_GENERATED_VERSION = '1.83.1'
 GRPC_VERSION = grpc.__version__
@@ -26,9 +26,9 @@ if _version_not_supported:
 
 
 class RentalServiceStub:
-    """---------------------------------------------------------------------------
-    Service
-    ---------------------------------------------------------------------------
+    """============================================================================
+    RENTAL SERVICE
+    ============================================================================
 
     """
 
@@ -68,6 +68,21 @@ class RentalServiceStub:
                 request_serializer=rental__pb2.ConfirmBookingRequest.SerializeToString,
                 response_deserializer=rental__pb2.ConfirmBookingResponse.FromString,
                 _registered_method=True)
+        self.SearchUser = channel.unary_unary(
+                '/rental.RentalService/SearchUser',
+                request_serializer=rental__pb2.SearchUserRequest.SerializeToString,
+                response_deserializer=rental__pb2.SearchUserResponse.FromString,
+                _registered_method=True)
+        self.SearchBooking = channel.unary_unary(
+                '/rental.RentalService/SearchBooking',
+                request_serializer=rental__pb2.SearchBookingRequest.SerializeToString,
+                response_deserializer=rental__pb2.SearchBookingResponse.FromString,
+                _registered_method=True)
+        self.RemoveBooking = channel.unary_unary(
+                '/rental.RentalService/RemoveBooking',
+                request_serializer=rental__pb2.RemoveBookingRequest.SerializeToString,
+                response_deserializer=rental__pb2.RemoveBookingResponse.FromString,
+                _registered_method=True)
         self.CreateUsers = channel.stream_unary(
                 '/rental.RentalService/CreateUsers',
                 request_serializer=rental__pb2.User.SerializeToString,
@@ -78,17 +93,39 @@ class RentalServiceStub:
                 request_serializer=rental__pb2.ListAvailableRequest.SerializeToString,
                 response_deserializer=rental__pb2.Property.FromString,
                 _registered_method=True)
+        self.ListUsers = channel.unary_stream(
+                '/rental.RentalService/ListUsers',
+                request_serializer=rental__pb2.ListUsersRequest.SerializeToString,
+                response_deserializer=rental__pb2.User.FromString,
+                _registered_method=True)
+        self.ListBookings = channel.unary_stream(
+                '/rental.RentalService/ListBookings',
+                request_serializer=rental__pb2.ListBookingsRequest.SerializeToString,
+                response_deserializer=rental__pb2.Booking.FromString,
+                _registered_method=True)
+        self.ListRemovedBookings = channel.unary_stream(
+                '/rental.RentalService/ListRemovedBookings',
+                request_serializer=rental__pb2.ListRemovedBookingsRequest.SerializeToString,
+                response_deserializer=rental__pb2.RemovedBooking.FromString,
+                _registered_method=True)
 
 
 class RentalServiceServicer:
-    """---------------------------------------------------------------------------
-    Service
-    ---------------------------------------------------------------------------
+    """============================================================================
+    RENTAL SERVICE
+    ============================================================================
 
     """
 
     def AddProperty(self, request, context):
-        """Simple RPCs
+        """========================================================================
+        SIMPLE RPCs
+        ========================================================================
+
+        ------------------------------------------------------------------------
+        Property management
+        ------------------------------------------------------------------------
+
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -113,7 +150,11 @@ class RentalServiceServicer:
         raise NotImplementedError('Method not implemented!')
 
     def BookProperty(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """------------------------------------------------------------------------
+        Cart / booking
+        ------------------------------------------------------------------------
+
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -124,15 +165,85 @@ class RentalServiceServicer:
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def SearchUser(self, request, context):
+        """------------------------------------------------------------------------
+        User lookup
+        ------------------------------------------------------------------------
+
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def SearchBooking(self, request, context):
+        """------------------------------------------------------------------------
+        Booking lookup / removal
+        ------------------------------------------------------------------------
+
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def RemoveBooking(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def CreateUsers(self, request_iterator, context):
-        """Client-side streaming
+        """========================================================================
+        CLIENT-SIDE STREAMING
+        ========================================================================
+
+        Client sends many User messages.
+
+        Server returns one CreateUsersResponse after the client completes
+        the stream.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def ListAvailableProperties(self, request, context):
-        """Server-side streaming
+        """========================================================================
+        SERVER-SIDE STREAMING
+        ========================================================================
+
+        ------------------------------------------------------------------------
+        Available properties
+        ------------------------------------------------------------------------
+
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ListUsers(self, request, context):
+        """------------------------------------------------------------------------
+        All users / hosts / guests
+        ------------------------------------------------------------------------
+
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ListBookings(self, request, context):
+        """------------------------------------------------------------------------
+        Active bookings
+        ------------------------------------------------------------------------
+
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ListRemovedBookings(self, request, context):
+        """------------------------------------------------------------------------
+        Removed booking history
+        ------------------------------------------------------------------------
+
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -171,6 +282,21 @@ def add_RentalServiceServicer_to_server(servicer, server):
                     request_deserializer=rental__pb2.ConfirmBookingRequest.FromString,
                     response_serializer=rental__pb2.ConfirmBookingResponse.SerializeToString,
             ),
+            'SearchUser': grpc.unary_unary_rpc_method_handler(
+                    servicer.SearchUser,
+                    request_deserializer=rental__pb2.SearchUserRequest.FromString,
+                    response_serializer=rental__pb2.SearchUserResponse.SerializeToString,
+            ),
+            'SearchBooking': grpc.unary_unary_rpc_method_handler(
+                    servicer.SearchBooking,
+                    request_deserializer=rental__pb2.SearchBookingRequest.FromString,
+                    response_serializer=rental__pb2.SearchBookingResponse.SerializeToString,
+            ),
+            'RemoveBooking': grpc.unary_unary_rpc_method_handler(
+                    servicer.RemoveBooking,
+                    request_deserializer=rental__pb2.RemoveBookingRequest.FromString,
+                    response_serializer=rental__pb2.RemoveBookingResponse.SerializeToString,
+            ),
             'CreateUsers': grpc.stream_unary_rpc_method_handler(
                     servicer.CreateUsers,
                     request_deserializer=rental__pb2.User.FromString,
@@ -181,6 +307,21 @@ def add_RentalServiceServicer_to_server(servicer, server):
                     request_deserializer=rental__pb2.ListAvailableRequest.FromString,
                     response_serializer=rental__pb2.Property.SerializeToString,
             ),
+            'ListUsers': grpc.unary_stream_rpc_method_handler(
+                    servicer.ListUsers,
+                    request_deserializer=rental__pb2.ListUsersRequest.FromString,
+                    response_serializer=rental__pb2.User.SerializeToString,
+            ),
+            'ListBookings': grpc.unary_stream_rpc_method_handler(
+                    servicer.ListBookings,
+                    request_deserializer=rental__pb2.ListBookingsRequest.FromString,
+                    response_serializer=rental__pb2.Booking.SerializeToString,
+            ),
+            'ListRemovedBookings': grpc.unary_stream_rpc_method_handler(
+                    servicer.ListRemovedBookings,
+                    request_deserializer=rental__pb2.ListRemovedBookingsRequest.FromString,
+                    response_serializer=rental__pb2.RemovedBooking.SerializeToString,
+            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
             'rental.RentalService', rpc_method_handlers)
@@ -190,9 +331,9 @@ def add_RentalServiceServicer_to_server(servicer, server):
 
  # This class is part of an EXPERIMENTAL API.
 class RentalService:
-    """---------------------------------------------------------------------------
-    Service
-    ---------------------------------------------------------------------------
+    """============================================================================
+    RENTAL SERVICE
+    ============================================================================
 
     """
 
@@ -359,6 +500,87 @@ class RentalService:
             _registered_method=True)
 
     @staticmethod
+    def SearchUser(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/rental.RentalService/SearchUser',
+            rental__pb2.SearchUserRequest.SerializeToString,
+            rental__pb2.SearchUserResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def SearchBooking(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/rental.RentalService/SearchBooking',
+            rental__pb2.SearchBookingRequest.SerializeToString,
+            rental__pb2.SearchBookingResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def RemoveBooking(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/rental.RentalService/RemoveBooking',
+            rental__pb2.RemoveBookingRequest.SerializeToString,
+            rental__pb2.RemoveBookingResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
     def CreateUsers(request_iterator,
             target,
             options=(),
@@ -402,6 +624,87 @@ class RentalService:
             '/rental.RentalService/ListAvailableProperties',
             rental__pb2.ListAvailableRequest.SerializeToString,
             rental__pb2.Property.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ListUsers(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(
+            request,
+            target,
+            '/rental.RentalService/ListUsers',
+            rental__pb2.ListUsersRequest.SerializeToString,
+            rental__pb2.User.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ListBookings(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(
+            request,
+            target,
+            '/rental.RentalService/ListBookings',
+            rental__pb2.ListBookingsRequest.SerializeToString,
+            rental__pb2.Booking.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ListRemovedBookings(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(
+            request,
+            target,
+            '/rental.RentalService/ListRemovedBookings',
+            rental__pb2.ListRemovedBookingsRequest.SerializeToString,
+            rental__pb2.RemovedBooking.FromString,
             options,
             channel_credentials,
             insecure,

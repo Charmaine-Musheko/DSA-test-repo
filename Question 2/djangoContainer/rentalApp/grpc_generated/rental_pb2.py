@@ -24,17 +24,17 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0crental.proto\x12\x06rental\"\xcd\x01\n\x08Property\x12\x13\n\x0bproperty_id\x18\x01 \x01(\t\x12\x0f\n\x07host_id\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x10\n\x08location\x18\x04 \x01(\t\x12\x0e\n\x06region\x18\x05 \x01(\t\x12\x15\n\rproperty_type\x18\x06 \x01(\t\x12\x17\n\x0fprice_per_night\x18\x07 \x01(\x01\x12&\n\x06status\x18\x08 \x01(\x0e\x32\x16.rental.PropertyStatus\x12\x13\n\x0b\x64\x65scription\x18\t \x01(\t\"d\n\x04User\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\r\n\x05\x65mail\x18\x03 \x01(\t\x12\x1e\n\x04role\x18\x04 \x01(\x0e\x32\x10.rental.UserRole\x12\x0e\n\x06region\x18\x05 \x01(\t\"0\n\tDateRange\x12\x10\n\x08\x63heck_in\x18\x01 \x01(\t\x12\x11\n\tcheck_out\x18\x02 \x01(\t\"\x8a\x01\n\x07\x42ooking\x12\x12\n\nbooking_id\x18\x01 \x01(\t\x12\x13\n\x0bproperty_id\x18\x02 \x01(\t\x12\x10\n\x08guest_id\x18\x03 \x01(\t\x12 \n\x05\x64\x61tes\x18\x04 \x01(\x0b\x32\x11.rental.DateRange\x12\x12\n\ntotal_cost\x18\x05 \x01(\x01\x12\x0e\n\x06status\x18\x06 \x01(\t\"\x9a\x01\n\x12\x41\x64\x64PropertyRequest\x12\x0f\n\x07host_id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x10\n\x08location\x18\x03 \x01(\t\x12\x0e\n\x06region\x18\x04 \x01(\t\x12\x15\n\rproperty_type\x18\x05 \x01(\t\x12\x17\n\x0fprice_per_night\x18\x06 \x01(\x01\x12\x13\n\x0b\x64\x65scription\x18\x07 \x01(\t\"L\n\x13\x41\x64\x64PropertyResponse\x12\x13\n\x0bproperty_id\x18\x01 \x01(\t\x12\x0f\n\x07success\x18\x02 \x01(\x08\x12\x0f\n\x07message\x18\x03 \x01(\t\"=\n\x13\x43reateUsersResponse\x12\x15\n\rcreated_count\x18\x01 \x01(\x05\x12\x0f\n\x07message\x18\x02 \x01(\t\"\xc0\x01\n\x15UpdatePropertyRequest\x12\x13\n\x0bproperty_id\x18\x01 \x01(\t\x12\x1c\n\x0fprice_per_night\x18\x02 \x01(\x01H\x00\x88\x01\x01\x12+\n\x06status\x18\x03 \x01(\x0e\x32\x16.rental.PropertyStatusH\x01\x88\x01\x01\x12\x18\n\x0b\x64\x65scription\x18\x04 \x01(\tH\x02\x88\x01\x01\x42\x12\n\x10_price_per_nightB\t\n\x07_statusB\x0e\n\x0c_description\"^\n\x16UpdatePropertyResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\"\n\x08property\x18\x03 \x01(\x0b\x32\x10.rental.Property\",\n\x15RemovePropertyRequest\x12\x13\n\x0bproperty_id\x18\x01 \x01(\t\"j\n\x16RemovePropertyResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\x12.\n\x14remaining_properties\x18\x03 \x03(\x0b\x32\x10.rental.Property\"U\n\x14ListAvailableRequest\x12\x17\n\x0flocation_filter\x18\x01 \x01(\t\x12\x11\n\tmin_price\x18\x02 \x01(\x01\x12\x11\n\tmax_price\x18\x03 \x01(\x01\",\n\x15SearchPropertyRequest\x12\x13\n\x0bproperty_id\x18\x01 \x01(\t\"`\n\x16SearchPropertyResponse\x12\x11\n\tavailable\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\"\n\x08property\x18\x03 \x01(\x0b\x32\x10.rental.Property\"^\n\x13\x42ookPropertyRequest\x12\x10\n\x08guest_id\x18\x01 \x01(\t\x12\x13\n\x0bproperty_id\x18\x02 \x01(\t\x12 \n\x05\x64\x61tes\x18\x03 \x01(\x0b\x32\x11.rental.DateRange\"a\n\x14\x42ookPropertyResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x0f\n\x07\x63\x61rt_id\x18\x03 \x01(\t\x12\x16\n\x0e\x65stimated_cost\x18\x04 \x01(\x01\":\n\x15\x43onfirmBookingRequest\x12\x10\n\x08guest_id\x18\x01 \x01(\t\x12\x0f\n\x07\x63\x61rt_id\x18\x02 \x01(\t\"\\\n\x16\x43onfirmBookingResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\x12 \n\x07\x62ooking\x18\x03 \x01(\x0b\x32\x0f.rental.Booking*q\n\x0ePropertyStatus\x12\x1f\n\x1bPROPERTY_STATUS_UNSPECIFIED\x10\x00\x12\r\n\tAVAILABLE\x10\x01\x12\n\n\x06\x42OOKED\x10\x02\x12\x15\n\x11UNDER_MAINTENANCE\x10\x03\x12\x0c\n\x08\x44\x45LISTED\x10\x04*:\n\x08UserRole\x12\x19\n\x15USER_ROLE_UNSPECIFIED\x10\x00\x12\x08\n\x04HOST\x10\x01\x12\t\n\x05GUEST\x10\x02\x32\xef\x04\n\rRentalService\x12\x46\n\x0b\x41\x64\x64Property\x12\x1a.rental.AddPropertyRequest\x1a\x1b.rental.AddPropertyResponse\x12O\n\x0eUpdateProperty\x12\x1d.rental.UpdatePropertyRequest\x1a\x1e.rental.UpdatePropertyResponse\x12O\n\x0eRemoveProperty\x12\x1d.rental.RemovePropertyRequest\x1a\x1e.rental.RemovePropertyResponse\x12O\n\x0eSearchProperty\x12\x1d.rental.SearchPropertyRequest\x1a\x1e.rental.SearchPropertyResponse\x12I\n\x0c\x42ookProperty\x12\x1b.rental.BookPropertyRequest\x1a\x1c.rental.BookPropertyResponse\x12O\n\x0e\x43onfirmBooking\x12\x1d.rental.ConfirmBookingRequest\x1a\x1e.rental.ConfirmBookingResponse\x12:\n\x0b\x43reateUsers\x12\x0c.rental.User\x1a\x1b.rental.CreateUsersResponse(\x01\x12K\n\x17ListAvailableProperties\x12\x1c.rental.ListAvailableRequest\x1a\x10.rental.Property0\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0crental.proto\x12\x06rental\"\xcd\x01\n\x08Property\x12\x13\n\x0bproperty_id\x18\x01 \x01(\t\x12\x0f\n\x07host_id\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x10\n\x08location\x18\x04 \x01(\t\x12\x0e\n\x06region\x18\x05 \x01(\t\x12\x15\n\rproperty_type\x18\x06 \x01(\t\x12\x17\n\x0fprice_per_night\x18\x07 \x01(\x01\x12&\n\x06status\x18\x08 \x01(\x0e\x32\x16.rental.PropertyStatus\x12\x13\n\x0b\x64\x65scription\x18\t \x01(\t\"d\n\x04User\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\r\n\x05\x65mail\x18\x03 \x01(\t\x12\x1e\n\x04role\x18\x04 \x01(\x0e\x32\x10.rental.UserRole\x12\x0e\n\x06region\x18\x05 \x01(\t\"0\n\tDateRange\x12\x10\n\x08\x63heck_in\x18\x01 \x01(\t\x12\x11\n\tcheck_out\x18\x02 \x01(\t\"\x8a\x01\n\x07\x42ooking\x12\x12\n\nbooking_id\x18\x01 \x01(\t\x12\x13\n\x0bproperty_id\x18\x02 \x01(\t\x12\x10\n\x08guest_id\x18\x03 \x01(\t\x12 \n\x05\x64\x61tes\x18\x04 \x01(\x0b\x32\x11.rental.DateRange\x12\x12\n\ntotal_cost\x18\x05 \x01(\x01\x12\x0e\n\x06status\x18\x06 \x01(\t\"V\n\x0eRemovedBooking\x12 \n\x07\x62ooking\x18\x01 \x01(\x0b\x32\x0f.rental.Booking\x12\x0e\n\x06reason\x18\x02 \x01(\t\x12\x12\n\nremoved_at\x18\x03 \x01(\t\"\x9a\x01\n\x12\x41\x64\x64PropertyRequest\x12\x0f\n\x07host_id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x10\n\x08location\x18\x03 \x01(\t\x12\x0e\n\x06region\x18\x04 \x01(\t\x12\x15\n\rproperty_type\x18\x05 \x01(\t\x12\x17\n\x0fprice_per_night\x18\x06 \x01(\x01\x12\x13\n\x0b\x64\x65scription\x18\x07 \x01(\t\"L\n\x13\x41\x64\x64PropertyResponse\x12\x13\n\x0bproperty_id\x18\x01 \x01(\t\x12\x0f\n\x07success\x18\x02 \x01(\x08\x12\x0f\n\x07message\x18\x03 \x01(\t\"\xc0\x01\n\x15UpdatePropertyRequest\x12\x13\n\x0bproperty_id\x18\x01 \x01(\t\x12\x1c\n\x0fprice_per_night\x18\x02 \x01(\x01H\x00\x88\x01\x01\x12+\n\x06status\x18\x03 \x01(\x0e\x32\x16.rental.PropertyStatusH\x01\x88\x01\x01\x12\x18\n\x0b\x64\x65scription\x18\x04 \x01(\tH\x02\x88\x01\x01\x42\x12\n\x10_price_per_nightB\t\n\x07_statusB\x0e\n\x0c_description\"^\n\x16UpdatePropertyResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\"\n\x08property\x18\x03 \x01(\x0b\x32\x10.rental.Property\",\n\x15RemovePropertyRequest\x12\x13\n\x0bproperty_id\x18\x01 \x01(\t\"j\n\x16RemovePropertyResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\x12.\n\x14remaining_properties\x18\x03 \x03(\x0b\x32\x10.rental.Property\"U\n\x14ListAvailableRequest\x12\x17\n\x0flocation_filter\x18\x01 \x01(\t\x12\x11\n\tmin_price\x18\x02 \x01(\x01\x12\x11\n\tmax_price\x18\x03 \x01(\x01\",\n\x15SearchPropertyRequest\x12\x13\n\x0bproperty_id\x18\x01 \x01(\t\"`\n\x16SearchPropertyResponse\x12\x11\n\tavailable\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\"\n\x08property\x18\x03 \x01(\x0b\x32\x10.rental.Property\"b\n\x13\x43reateUsersResponse\x12\x15\n\rcreated_count\x18\x01 \x01(\x05\x12\x0f\n\x07message\x18\x02 \x01(\t\x12#\n\rcreated_users\x18\x03 \x03(\x0b\x32\x0c.rental.User\"9\n\x10ListUsersRequest\x12%\n\x0brole_filter\x18\x01 \x01(\x0e\x32\x10.rental.UserRole\"$\n\x11SearchUserRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\t\"P\n\x12SearchUserResponse\x12\r\n\x05\x66ound\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x1a\n\x04user\x18\x03 \x01(\x0b\x32\x0c.rental.User\"^\n\x13\x42ookPropertyRequest\x12\x10\n\x08guest_id\x18\x01 \x01(\t\x12\x13\n\x0bproperty_id\x18\x02 \x01(\t\x12 \n\x05\x64\x61tes\x18\x03 \x01(\x0b\x32\x11.rental.DateRange\"a\n\x14\x42ookPropertyResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x0f\n\x07\x63\x61rt_id\x18\x03 \x01(\t\x12\x16\n\x0e\x65stimated_cost\x18\x04 \x01(\x01\":\n\x15\x43onfirmBookingRequest\x12\x10\n\x08guest_id\x18\x01 \x01(\t\x12\x0f\n\x07\x63\x61rt_id\x18\x02 \x01(\t\"\\\n\x16\x43onfirmBookingResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\x12 \n\x07\x62ooking\x18\x03 \x01(\x0b\x32\x0f.rental.Booking\"<\n\x13ListBookingsRequest\x12\x10\n\x08guest_id\x18\x01 \x01(\t\x12\x13\n\x0bproperty_id\x18\x02 \x01(\t\"*\n\x14SearchBookingRequest\x12\x12\n\nbooking_id\x18\x01 \x01(\t\"\x9b\x01\n\x15SearchBookingResponse\x12\r\n\x05\x66ound\x18\x01 \x01(\x08\x12\x0f\n\x07removed\x18\x02 \x01(\x08\x12\x0f\n\x07message\x18\x03 \x01(\t\x12 \n\x07\x62ooking\x18\x04 \x01(\x0b\x32\x0f.rental.Booking\x12/\n\x0fremoved_booking\x18\x05 \x01(\x0b\x32\x16.rental.RemovedBooking\":\n\x14RemoveBookingRequest\x12\x12\n\nbooking_id\x18\x01 \x01(\t\x12\x0e\n\x06reason\x18\x02 \x01(\t\"j\n\x15RemoveBookingResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\x12/\n\x0fremoved_booking\x18\x03 \x01(\x0b\x32\x16.rental.RemovedBooking\"C\n\x1aListRemovedBookingsRequest\x12\x10\n\x08guest_id\x18\x01 \x01(\t\x12\x13\n\x0bproperty_id\x18\x02 \x01(\t*q\n\x0ePropertyStatus\x12\x1f\n\x1bPROPERTY_STATUS_UNSPECIFIED\x10\x00\x12\r\n\tAVAILABLE\x10\x01\x12\n\n\x06\x42OOKED\x10\x02\x12\x15\n\x11UNDER_MAINTENANCE\x10\x03\x12\x0c\n\x08\x44\x45LISTED\x10\x04*:\n\x08UserRole\x12\x19\n\x15USER_ROLE_UNSPECIFIED\x10\x00\x12\x08\n\x04HOST\x10\x01\x12\t\n\x05GUEST\x10\x02\x32\x9c\x08\n\rRentalService\x12\x46\n\x0b\x41\x64\x64Property\x12\x1a.rental.AddPropertyRequest\x1a\x1b.rental.AddPropertyResponse\x12O\n\x0eUpdateProperty\x12\x1d.rental.UpdatePropertyRequest\x1a\x1e.rental.UpdatePropertyResponse\x12O\n\x0eRemoveProperty\x12\x1d.rental.RemovePropertyRequest\x1a\x1e.rental.RemovePropertyResponse\x12O\n\x0eSearchProperty\x12\x1d.rental.SearchPropertyRequest\x1a\x1e.rental.SearchPropertyResponse\x12I\n\x0c\x42ookProperty\x12\x1b.rental.BookPropertyRequest\x1a\x1c.rental.BookPropertyResponse\x12O\n\x0e\x43onfirmBooking\x12\x1d.rental.ConfirmBookingRequest\x1a\x1e.rental.ConfirmBookingResponse\x12\x43\n\nSearchUser\x12\x19.rental.SearchUserRequest\x1a\x1a.rental.SearchUserResponse\x12L\n\rSearchBooking\x12\x1c.rental.SearchBookingRequest\x1a\x1d.rental.SearchBookingResponse\x12L\n\rRemoveBooking\x12\x1c.rental.RemoveBookingRequest\x1a\x1d.rental.RemoveBookingResponse\x12:\n\x0b\x43reateUsers\x12\x0c.rental.User\x1a\x1b.rental.CreateUsersResponse(\x01\x12K\n\x17ListAvailableProperties\x12\x1c.rental.ListAvailableRequest\x1a\x10.rental.Property0\x01\x12\x35\n\tListUsers\x12\x18.rental.ListUsersRequest\x1a\x0c.rental.User0\x01\x12>\n\x0cListBookings\x12\x1b.rental.ListBookingsRequest\x1a\x0f.rental.Booking0\x01\x12S\n\x13ListRemovedBookings\x12\".rental.ListRemovedBookingsRequest\x1a\x16.rental.RemovedBooking0\x01\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'rental_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_PROPERTYSTATUS']._serialized_start=1848
-  _globals['_PROPERTYSTATUS']._serialized_end=1961
-  _globals['_USERROLE']._serialized_start=1963
-  _globals['_USERROLE']._serialized_end=2021
+  _globals['_PROPERTYSTATUS']._serialized_start=2653
+  _globals['_PROPERTYSTATUS']._serialized_end=2766
+  _globals['_USERROLE']._serialized_start=2768
+  _globals['_USERROLE']._serialized_end=2826
   _globals['_PROPERTY']._serialized_start=25
   _globals['_PROPERTY']._serialized_end=230
   _globals['_USER']._serialized_start=232
@@ -43,34 +43,54 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_DATERANGE']._serialized_end=382
   _globals['_BOOKING']._serialized_start=385
   _globals['_BOOKING']._serialized_end=523
-  _globals['_ADDPROPERTYREQUEST']._serialized_start=526
-  _globals['_ADDPROPERTYREQUEST']._serialized_end=680
-  _globals['_ADDPROPERTYRESPONSE']._serialized_start=682
-  _globals['_ADDPROPERTYRESPONSE']._serialized_end=758
-  _globals['_CREATEUSERSRESPONSE']._serialized_start=760
-  _globals['_CREATEUSERSRESPONSE']._serialized_end=821
-  _globals['_UPDATEPROPERTYREQUEST']._serialized_start=824
-  _globals['_UPDATEPROPERTYREQUEST']._serialized_end=1016
-  _globals['_UPDATEPROPERTYRESPONSE']._serialized_start=1018
-  _globals['_UPDATEPROPERTYRESPONSE']._serialized_end=1112
-  _globals['_REMOVEPROPERTYREQUEST']._serialized_start=1114
-  _globals['_REMOVEPROPERTYREQUEST']._serialized_end=1158
-  _globals['_REMOVEPROPERTYRESPONSE']._serialized_start=1160
-  _globals['_REMOVEPROPERTYRESPONSE']._serialized_end=1266
-  _globals['_LISTAVAILABLEREQUEST']._serialized_start=1268
-  _globals['_LISTAVAILABLEREQUEST']._serialized_end=1353
-  _globals['_SEARCHPROPERTYREQUEST']._serialized_start=1355
-  _globals['_SEARCHPROPERTYREQUEST']._serialized_end=1399
-  _globals['_SEARCHPROPERTYRESPONSE']._serialized_start=1401
-  _globals['_SEARCHPROPERTYRESPONSE']._serialized_end=1497
-  _globals['_BOOKPROPERTYREQUEST']._serialized_start=1499
-  _globals['_BOOKPROPERTYREQUEST']._serialized_end=1593
-  _globals['_BOOKPROPERTYRESPONSE']._serialized_start=1595
-  _globals['_BOOKPROPERTYRESPONSE']._serialized_end=1692
-  _globals['_CONFIRMBOOKINGREQUEST']._serialized_start=1694
-  _globals['_CONFIRMBOOKINGREQUEST']._serialized_end=1752
-  _globals['_CONFIRMBOOKINGRESPONSE']._serialized_start=1754
-  _globals['_CONFIRMBOOKINGRESPONSE']._serialized_end=1846
-  _globals['_RENTALSERVICE']._serialized_start=2024
-  _globals['_RENTALSERVICE']._serialized_end=2647
+  _globals['_REMOVEDBOOKING']._serialized_start=525
+  _globals['_REMOVEDBOOKING']._serialized_end=611
+  _globals['_ADDPROPERTYREQUEST']._serialized_start=614
+  _globals['_ADDPROPERTYREQUEST']._serialized_end=768
+  _globals['_ADDPROPERTYRESPONSE']._serialized_start=770
+  _globals['_ADDPROPERTYRESPONSE']._serialized_end=846
+  _globals['_UPDATEPROPERTYREQUEST']._serialized_start=849
+  _globals['_UPDATEPROPERTYREQUEST']._serialized_end=1041
+  _globals['_UPDATEPROPERTYRESPONSE']._serialized_start=1043
+  _globals['_UPDATEPROPERTYRESPONSE']._serialized_end=1137
+  _globals['_REMOVEPROPERTYREQUEST']._serialized_start=1139
+  _globals['_REMOVEPROPERTYREQUEST']._serialized_end=1183
+  _globals['_REMOVEPROPERTYRESPONSE']._serialized_start=1185
+  _globals['_REMOVEPROPERTYRESPONSE']._serialized_end=1291
+  _globals['_LISTAVAILABLEREQUEST']._serialized_start=1293
+  _globals['_LISTAVAILABLEREQUEST']._serialized_end=1378
+  _globals['_SEARCHPROPERTYREQUEST']._serialized_start=1380
+  _globals['_SEARCHPROPERTYREQUEST']._serialized_end=1424
+  _globals['_SEARCHPROPERTYRESPONSE']._serialized_start=1426
+  _globals['_SEARCHPROPERTYRESPONSE']._serialized_end=1522
+  _globals['_CREATEUSERSRESPONSE']._serialized_start=1524
+  _globals['_CREATEUSERSRESPONSE']._serialized_end=1622
+  _globals['_LISTUSERSREQUEST']._serialized_start=1624
+  _globals['_LISTUSERSREQUEST']._serialized_end=1681
+  _globals['_SEARCHUSERREQUEST']._serialized_start=1683
+  _globals['_SEARCHUSERREQUEST']._serialized_end=1719
+  _globals['_SEARCHUSERRESPONSE']._serialized_start=1721
+  _globals['_SEARCHUSERRESPONSE']._serialized_end=1801
+  _globals['_BOOKPROPERTYREQUEST']._serialized_start=1803
+  _globals['_BOOKPROPERTYREQUEST']._serialized_end=1897
+  _globals['_BOOKPROPERTYRESPONSE']._serialized_start=1899
+  _globals['_BOOKPROPERTYRESPONSE']._serialized_end=1996
+  _globals['_CONFIRMBOOKINGREQUEST']._serialized_start=1998
+  _globals['_CONFIRMBOOKINGREQUEST']._serialized_end=2056
+  _globals['_CONFIRMBOOKINGRESPONSE']._serialized_start=2058
+  _globals['_CONFIRMBOOKINGRESPONSE']._serialized_end=2150
+  _globals['_LISTBOOKINGSREQUEST']._serialized_start=2152
+  _globals['_LISTBOOKINGSREQUEST']._serialized_end=2212
+  _globals['_SEARCHBOOKINGREQUEST']._serialized_start=2214
+  _globals['_SEARCHBOOKINGREQUEST']._serialized_end=2256
+  _globals['_SEARCHBOOKINGRESPONSE']._serialized_start=2259
+  _globals['_SEARCHBOOKINGRESPONSE']._serialized_end=2414
+  _globals['_REMOVEBOOKINGREQUEST']._serialized_start=2416
+  _globals['_REMOVEBOOKINGREQUEST']._serialized_end=2474
+  _globals['_REMOVEBOOKINGRESPONSE']._serialized_start=2476
+  _globals['_REMOVEBOOKINGRESPONSE']._serialized_end=2582
+  _globals['_LISTREMOVEDBOOKINGSREQUEST']._serialized_start=2584
+  _globals['_LISTREMOVEDBOOKINGSREQUEST']._serialized_end=2651
+  _globals['_RENTALSERVICE']._serialized_start=2829
+  _globals['_RENTALSERVICE']._serialized_end=3881
 # @@protoc_insertion_point(module_scope)
