@@ -346,6 +346,12 @@ function registerUser(
 
 // ============================================================================
 // LIST USERS
+//
+// role_filter:
+//
+// USER_ROLE_UNSPECIFIED -> all users
+// HOST                  -> hosts only
+// GUEST                 -> guests only
 // ============================================================================
 
 function collectUsers(
@@ -364,7 +370,7 @@ function collectUsers(
     }
 
 
-    UserRecord[] records =
+    UserRecord[] userRecords =
         check listUserRecords(
             roleFilter
         );
@@ -373,17 +379,19 @@ function collectUsers(
     User[] users = [];
 
 
-    foreach UserRecord record in records {
+    foreach UserRecord userRecord
+        in userRecords {
 
         users.push(
-            toProtoUser(record)
+            toProtoUser(
+                userRecord
+            )
         );
     }
 
 
     return users;
 }
-
 
 // ============================================================================
 // SEARCH USER
@@ -1278,4 +1286,6 @@ function collectRemovedBookings(
 
     return removedBookings;
 }
+
+
 
