@@ -134,9 +134,11 @@ def list_available_properties(
             location_filter=location_filter,
             min_price=float(min_price),
             max_price=float(max_price),
-        )
-    )
+    ),
+    timeout=5,
+)
 
+    
 
 def search_property(property_id):
     stub = get_stub()

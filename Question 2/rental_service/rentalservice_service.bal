@@ -293,16 +293,24 @@ service "RentalService" on ep {
     // ------------------------------------------------------------------------
 
     remote function ListAvailableProperties(
+        RentalServicePropertyCaller caller,
         ListAvailableRequest value
-    ) returns stream<Property, grpc:Error?>|error {
+    ) returns error? {
 
         Property[] properties =
-            check collectAvailable(
-                value
+            check collectAvailable(value);
+
+        foreach Property property in properties {
+
+            check caller->sendProperty(
+                property
             );
+        }
 
+        // Explicitly terminate the server stream.
+        check caller->complete();
 
-        return properties.toStream();
+        return;
     }
 
 
@@ -315,16 +323,23 @@ service "RentalService" on ep {
     // ------------------------------------------------------------------------
 
     remote function ListUsers(
+        RentalServiceUserCaller caller,
         ListUsersRequest value
-    ) returns stream<User, grpc:Error?>|error {
+    ) returns error? {
 
         User[] users =
-            check collectUsers(
-                value
+            check collectUsers(value);
+
+        foreach User user in users {
+
+            check caller->sendUser(
+                user
             );
+        }
 
+        check caller->complete();
 
-        return users.toStream();
+        return;
     }
 
 
@@ -338,16 +353,23 @@ service "RentalService" on ep {
     // ------------------------------------------------------------------------
 
     remote function ListBookings(
-        ListBookingsRequest value
-    ) returns stream<Booking, grpc:Error?>|error {
+            RentalServiceBookingCaller caller,
+            ListBookingsRequest value
+        ) returns error? {
 
-        Booking[] bookings =
-            check collectBookings(
-                value
-            );
+            Booking[] bookings =
+                check collectBookings(value);
 
+            foreach Booking booking in bookings {
 
-        return bookings.toStream();
+                check caller->sendBooking(
+                    booking
+                );
+            }
+
+            check caller->complete();
+
+            return;
     }
 
 
@@ -358,15 +380,25 @@ service "RentalService" on ep {
     // ------------------------------------------------------------------------
 
     remote function ListRemovedBookings(
+        RentalServiceRemovedBookingCaller caller,
         ListRemovedBookingsRequest value
-    ) returns stream<RemovedBooking, grpc:Error?>|error {
+    ) returns error? {
 
         RemovedBooking[] removedBookings =
             check collectRemovedBookings(
                 value
             );
 
+        foreach RemovedBooking removedBooking
+            in removedBookings {
 
-        return removedBookings.toStream();
+            check caller->sendRemovedBooking(
+                removedBooking
+            );
+        }
+
+        check caller->complete();
+
+        return;
     }
 }
