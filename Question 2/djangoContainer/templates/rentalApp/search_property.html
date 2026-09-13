@@ -1,0 +1,306 @@
+{% extends "../base.html" %}
+
+{% block title %}
+Search Property
+{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-lg-9">
+
+        <!-- ============================================================= -->
+        <!-- PAGE HEADER -->
+        <!-- ============================================================= -->
+
+        <div class="mb-4">
+
+            <h2 class="mb-1">
+                Search Property
+            </h2>
+
+            <p class="text-muted mb-0">
+                Search for a rental property using its property ID.
+            </p>
+
+        </div>
+
+
+        <!-- ============================================================= -->
+        <!-- SEARCH FORM -->
+        <!-- ============================================================= -->
+
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-body p-4">
+
+                <form method="get">
+
+                    <div class="row g-3 align-items-end">
+
+                        <div class="col-md-9">
+
+                            <label
+                                for="property_id"
+                                class="form-label"
+                            >
+                                Property ID
+                            </label>
+
+                            <input
+                                type="text"
+                                id="property_id"
+                                name="property_id"
+                                value="{{ property_id }}"
+                                class="form-control"
+                                placeholder="Example: PROP-0001"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary w-100"
+                            >
+                                Search
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <!-- ============================================================= -->
+        <!-- gRPC ERROR -->
+        <!-- ============================================================= -->
+
+        {% if error %}
+
+            <div class="alert alert-danger">
+
+                <h6 class="alert-heading">
+                    Rental Service Error
+                </h6>
+
+                <p class="mb-0">
+                    {{ error }}
+                </p>
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- ============================================================= -->
+        <!-- SEARCH RESULT -->
+        <!-- ============================================================= -->
+
+        {% if searched %}
+
+            {% if result %}
+
+                <div class="card shadow-sm border-0">
+
+                    <div class="card-header bg-white py-3">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <strong>
+                                    Property Search Result
+                                </strong>
+
+                            </div>
+
+
+                            {% if result.available %}
+
+                                <span class="badge bg-success">
+                                    Available
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-danger">
+                                    Not Available
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card-body p-4">
+
+                        <div class="mb-4">
+
+                            <h4 class="mb-1">
+
+                                {% if result.name %}
+
+                                    {{ result.name }}
+
+                                {% else %}
+
+                                    Property not found
+
+                                {% endif %}
+
+                            </h4>
+
+                            <p class="text-muted mb-0">
+                                {{ result.message }}
+                            </p>
+
+                        </div>
+
+
+                        {% if result.property_id %}
+
+                            <div class="row g-4">
+
+                                <div class="col-md-6">
+
+                                    <small class="text-muted d-block">
+                                        Property ID
+                                    </small>
+
+                                    <strong>
+                                        {{ result.property_id }}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="col-md-6">
+
+                                    <small class="text-muted d-block">
+                                        Host ID
+                                    </small>
+
+                                    <strong>
+                                        {{ result.host_id }}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="col-md-6">
+
+                                    <small class="text-muted d-block">
+                                        Location
+                                    </small>
+
+                                    <strong>
+                                        {{ result.location }}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="col-md-6">
+
+                                    <small class="text-muted d-block">
+                                        Region
+                                    </small>
+
+                                    <strong>
+                                        {{ result.region }}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="col-md-6">
+
+                                    <small class="text-muted d-block">
+                                        Property Type
+                                    </small>
+
+                                    <strong>
+                                        {{ result.property_type }}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="col-md-6">
+
+                                    <small class="text-muted d-block">
+                                        Price Per Night
+                                    </small>
+
+                                    <strong>
+                                        N${{ result.price_per_night|floatformat:2 }}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="col-12">
+
+                                    <small class="text-muted d-block">
+                                        Description
+                                    </small>
+
+                                    <p class="mb-0">
+                                        {{ result.description|default:"No description provided." }}
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <hr class="my-4">
+
+
+                            {% if result.available %}
+
+                                <a
+                                    href="{% url 'rentalApp:property_book' %}?property_id={{ result.property_id }}"
+                                    class="btn btn-success"
+                                >
+                                    Book This Property
+                                </a>
+
+                            {% endif %}
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+            {% else %}
+
+                <div class="alert alert-warning">
+
+                    No result was returned for the property ID
+                    <strong>{{ property_id }}</strong>.
+
+                </div>
+
+            {% endif %}
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,271 @@
+{% extends "../base.html" %}
+
+{% block title %}
+Book Property
+{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-lg-8">
+
+        <!-- ============================================================= -->
+        <!-- HEADER -->
+        <!-- ============================================================= -->
+
+        <div class="mb-4">
+
+            <h2 class="mb-1">
+                Book Property
+            </h2>
+
+            <p class="text-muted mb-0">
+                Add a property booking request to the guest's cart.
+            </p>
+
+        </div>
+
+
+        <!-- ============================================================= -->
+        <!-- BOOKING FORM -->
+        <!-- ============================================================= -->
+
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-header bg-white py-3">
+
+                <strong>
+                    Booking Details
+                </strong>
+
+            </div>
+
+
+            <div class="card-body p-4">
+
+                <form method="post">
+
+                    {% csrf_token %}
+
+
+                    <!-- GUEST ID -->
+
+                    <div class="mb-3">
+
+                        <label
+                            for="guest_id"
+                            class="form-label"
+                        >
+                            Guest ID
+                        </label>
+
+                        <input
+                            type="text"
+                            id="guest_id"
+                            name="guest_id"
+                            class="form-control"
+                            placeholder="Example: USR-0002"
+                            required
+                        >
+
+                        <div class="form-text">
+                            Enter the ID of a user registered as a guest.
+                        </div>
+
+                    </div>
+
+
+                    <!-- PROPERTY ID -->
+
+                    <div class="mb-3">
+
+                        <label
+                            for="property_id"
+                            class="form-label"
+                        >
+                            Property ID
+                        </label>
+
+                        <input
+                            type="text"
+                            id="property_id"
+                            name="property_id"
+                            class="form-control"
+                            value="{{ request.GET.property_id }}"
+                            placeholder="Example: PROP-0001"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- DATES -->
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+
+                            <label
+                                for="check_in"
+                                class="form-label"
+                            >
+                                Check-in Date
+                            </label>
+
+                            <input
+                                type="date"
+                                id="check_in"
+                                name="check_in"
+                                class="form-control"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label
+                                for="check_out"
+                                class="form-label"
+                            >
+                                Check-out Date
+                            </label>
+
+                            <input
+                                type="date"
+                                id="check_out"
+                                name="check_out"
+                                class="form-control"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="d-flex gap-2">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            Add to Cart
+                        </button>
+
+
+                        <a
+                            href="{% url 'rentalApp:property_list' %}"
+                            class="btn btn-outline-secondary"
+                        >
+                            Cancel
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <!-- ============================================================= -->
+        <!-- Ballerina BookProperty RESPONSE -->
+        <!-- ============================================================= -->
+
+        {% if response %}
+
+            {% if response.success %}
+
+                <div class="card shadow-sm border-success">
+
+                    <div class="card-header bg-success text-white">
+
+                        Booking Added to Cart
+
+                    </div>
+
+
+                    <div class="card-body p-4">
+
+                        <p>
+                            {{ response.message }}
+                        </p>
+
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+
+                                <small class="text-muted d-block">
+                                    Cart ID
+                                </small>
+
+                                <strong class="fs-5">
+                                    {{ response.cart_id }}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <small class="text-muted d-block">
+                                    Estimated Cost
+                                </small>
+
+                                <strong class="fs-5">
+                                    N${{ response.estimated_cost|floatformat:2 }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <hr>
+
+
+                        <p class="text-muted">
+                            The property has only been added to the cart.
+                            You must confirm the booking before it becomes
+                            a confirmed reservation.
+                        </p>
+
+
+                        <a
+                            href="{% url 'rentalApp:booking_confirm' %}?cart_id={{ response.cart_id }}"
+                            class="btn btn-success"
+                        >
+                            Confirm Booking
+                        </a>
+
+                    </div>
+
+                </div>
+
+            {% else %}
+
+                <div class="alert alert-danger">
+
+                    <h6 class="alert-heading">
+                        Booking Failed
+                    </h6>
+
+                    {{ response.message }}
+
+                </div>
+
+            {% endif %}
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}
+

@@ -1,0 +1,275 @@
+{% extends "../base.html" %}
+
+{% block title %}
+Confirm Booking
+{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-lg-8">
+
+        <!-- ============================================================= -->
+        <!-- PAGE HEADER -->
+        <!-- ============================================================= -->
+
+        <div class="mb-4">
+
+            <h2 class="mb-1">
+                Confirm Booking
+            </h2>
+
+            <p class="text-muted mb-0">
+                Confirm a cart entry and create the final booking.
+            </p>
+
+        </div>
+
+
+        <!-- ============================================================= -->
+        <!-- CONFIRM FORM -->
+        <!-- ============================================================= -->
+
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-header bg-white py-3">
+
+                <strong>
+                    Booking Confirmation
+                </strong>
+
+            </div>
+
+
+            <div class="card-body p-4">
+
+                <form method="post">
+
+                    {% csrf_token %}
+
+
+                    <!-- GUEST -->
+
+                    <div class="mb-3">
+
+                        <label
+                            for="guest_id"
+                            class="form-label"
+                        >
+                            Guest ID
+                        </label>
+
+                        <input
+                            type="text"
+                            id="guest_id"
+                            name="guest_id"
+                            class="form-control"
+                            placeholder="Example: USR-0002"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- CART ID -->
+
+                    <div class="mb-4">
+
+                        <label
+                            for="cart_id"
+                            class="form-label"
+                        >
+                            Cart ID
+                        </label>
+
+                        <input
+                            type="text"
+                            id="cart_id"
+                            name="cart_id"
+                            value="{{ request.GET.cart_id }}"
+                            class="form-control"
+                            placeholder="Example: CART-0001"
+                            required
+                        >
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-success"
+                    >
+                        Confirm Booking
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <!-- ============================================================= -->
+        <!-- CONFIRMED BOOKING -->
+        <!-- ============================================================= -->
+
+        {% if booking %}
+
+            <div class="card shadow-sm border-success">
+
+                <div class="card-header bg-success text-white">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <strong>
+                            Booking Confirmed
+                        </strong>
+
+                        <span class="badge bg-light text-success">
+                            {{ booking.status }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body p-4">
+
+
+                    <div class="text-center mb-4">
+
+                        <h4 class="text-success">
+                            Reservation Successful
+                        </h4>
+
+                        <p class="text-muted">
+                            Your booking has been confirmed by the
+                            Ballerina RentalService.
+                        </p>
+
+                    </div>
+
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+
+                            <small class="text-muted d-block">
+                                Booking ID
+                            </small>
+
+                            <strong>
+                                {{ booking.booking_id }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <small class="text-muted d-block">
+                                Property ID
+                            </small>
+
+                            <strong>
+                                {{ booking.property_id }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <small class="text-muted d-block">
+                                Guest ID
+                            </small>
+
+                            <strong>
+                                {{ booking.guest_id }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <small class="text-muted d-block">
+                                Status
+                            </small>
+
+                            <strong>
+                                {{ booking.status }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <small class="text-muted d-block">
+                                Check-in
+                            </small>
+
+                            <strong>
+                                {{ booking.check_in }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <small class="text-muted d-block">
+                                Check-out
+                            </small>
+
+                            <strong>
+                                {{ booking.check_out }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="col-12">
+
+                            <div class="bg-light rounded p-3">
+
+                                <small class="text-muted d-block">
+                                    Total Booking Cost
+                                </small>
+
+                                <strong class="fs-4 text-success">
+                                    N${{ booking.total_cost|floatformat:2 }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <hr class="my-4">
+
+
+                    <a
+                        href="{% url 'rentalApp:property_list' %}"
+                        class="btn btn-primary"
+                    >
+                        Browse More Properties
+                    </a>
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}
+
