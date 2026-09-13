@@ -1,0 +1,109 @@
+{% extends "../base.html" %}
+
+{% block title %}Search Booking{% endblock %}
+
+{% block content %}
+
+<h2>Search Booking</h2>
+
+<form class="card card-body my-4">
+
+    <div class="input-group">
+
+        <input
+            name="booking_id"
+            value="{{ booking_id }}"
+            class="form-control"
+            placeholder="BKG-0001"
+        >
+
+        <button class="btn btn-primary">
+            Search
+        </button>
+
+    </div>
+
+</form>
+
+
+{% if result %}
+
+    {% if result.found %}
+
+        <div class="card shadow-sm">
+
+            <div class="card-body">
+
+                {% if result.removed %}
+
+                    <span class="badge bg-danger mb-3">
+                        Removed Booking
+                    </span>
+
+                {% else %}
+
+                    <span class="badge bg-success mb-3">
+                        Active Booking
+                    </span>
+
+                {% endif %}
+
+
+                <h4>
+                    {{ result.booking_id }}
+                </h4>
+
+                <p>
+                    <strong>Property:</strong>
+                    {{ result.property_id }}
+                </p>
+
+                <p>
+                    <strong>Guest:</strong>
+                    {{ result.guest_id }}
+                </p>
+
+                <p>
+                    <strong>Dates:</strong>
+                    {{ result.check_in }}
+                    →
+                    {{ result.check_out }}
+                </p>
+
+                <p>
+                    <strong>Total:</strong>
+                    N${{ result.total_cost|floatformat:2 }}
+                </p>
+
+
+                {% if result.removed %}
+
+                    <hr>
+
+                    <p>
+                        <strong>Removal reason:</strong>
+                        {{ result.reason }}
+                    </p>
+
+                    <p>
+                        <strong>Removed:</strong>
+                        {{ result.removed_at }}
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    {% else %}
+
+        <div class="alert alert-warning">
+            {{ result.message }}
+        </div>
+
+    {% endif %}
+
+{% endif %}
+
+{% endblock %}

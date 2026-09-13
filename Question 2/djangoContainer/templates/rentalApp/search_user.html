@@ -1,0 +1,78 @@
+{% extends "../base.html" %}
+
+{% block title %}Search User{% endblock %}
+
+{% block content %}
+
+<h2>Search User</h2>
+
+<form class="card card-body my-4">
+
+    <label class="form-label">
+        User ID
+    </label>
+
+    <div class="input-group">
+
+        <input
+            name="user_id"
+            value="{{ user_id }}"
+            class="form-control"
+            placeholder="USR-0001"
+        >
+
+        <button class="btn btn-primary">
+            Search
+        </button>
+
+    </div>
+
+</form>
+
+
+{% if result %}
+
+    {% if result.found %}
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <h4>{{ result.name }}</h4>
+
+            <p>
+                <strong>ID:</strong>
+                {{ result.user_id }}
+            </p>
+
+            <p>
+                <strong>Email:</strong>
+                {{ result.email }}
+            </p>
+
+            <p>
+                <strong>Role:</strong>
+                {{ result.role }}
+            </p>
+
+            <p>
+                <strong>Region:</strong>
+                {{ result.region }}
+            </p>
+
+        </div>
+
+    </div>
+
+    {% else %}
+
+    <div class="alert alert-warning">
+        {{ result.message }}
+    </div>
+
+    {% endif %}
+
+{% endif %}
+
+{% endblock %}
+

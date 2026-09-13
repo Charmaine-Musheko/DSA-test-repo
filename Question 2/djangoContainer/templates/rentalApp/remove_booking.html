@@ -1,0 +1,84 @@
+{% extends "../base.html" %}
+
+{% block title %}Remove Booking{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-lg-7">
+
+        <div class="card shadow-sm">
+
+            <div class="card-body p-4">
+
+                <h3>Remove Booking</h3>
+
+                <p class="text-muted">
+                    The booking will be archived rather than permanently lost.
+                </p>
+
+                <form method="post">
+
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Booking ID
+                        </label>
+
+                        <input
+                            name="booking_id"
+                            class="form-control"
+                            placeholder="BKG-0001"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Reason
+                        </label>
+
+                        <textarea
+                            name="reason"
+                            class="form-control"
+                            rows="4"
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+                    <button class="btn btn-danger">
+                        Remove and Archive
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        {% if removed %}
+
+        <div class="alert alert-success mt-4">
+
+            Booking
+            <strong>{{ removed.booking_id }}</strong>
+            was archived successfully.
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

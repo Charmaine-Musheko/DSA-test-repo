@@ -40,39 +40,29 @@
 
         <div class="navbar-nav">
 
-            <a
-                class="nav-link"
-                href="{% url 'rentalApp:property_list' %}"
-            >
+            <a class="nav-link"
+            href="{% url 'rentalApp:dashboard' %}">
+                Dashboard
+            </a>
+
+            <a class="nav-link"
+            href="{% url 'rentalApp:user_list' %}">
+                Users
+            </a>
+
+            <a class="nav-link"
+            href="{% url 'rentalApp:property_list' %}">
                 Properties
             </a>
 
-            <a
-                class="nav-link"
-                href="{% url 'rentalApp:property_create' %}"
-            >
-                Add Property
+            <a class="nav-link"
+            href="{% url 'rentalApp:booking_list' %}">
+                Bookings
             </a>
 
-            <a
-                class="nav-link"
-                href="{% url 'rentalApp:property_search' %}"
-            >
-                Search
-            </a>
-
-            <a
-                class="nav-link"
-                href="{% url 'rentalApp:property_book' %}"
-            >
-                Book
-            </a>
-
-            <a
-                class="nav-link"
-                href="{% url 'rentalApp:booking_confirm' %}"
-            >
-                Confirm
+            <a class="nav-link"
+            href="{% url 'rentalApp:removed_booking_list' %}">
+                Booking History
             </a>
 
         </div>

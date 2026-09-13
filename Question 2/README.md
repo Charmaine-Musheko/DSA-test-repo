@@ -102,3 +102,27 @@ Separately:
  rental_service_db
           │
           └── rental schema
+
+## Django Views
+
+Users
+ ├── Create users
+ ├── View all users
+ ├── View hosts only
+ ├── View guests only
+ └── Search user
+
+Properties
+ ├── Add property
+ ├── List/filter available properties
+ ├── Search property
+ ├── Update property
+ └── Remove property
+
+Bookings
+ ├── Add to cart
+ ├── Confirm booking
+ ├── View active bookings
+ ├── Search active/removed booking
+ ├── Remove/archive booking
+ └── View removed booking history

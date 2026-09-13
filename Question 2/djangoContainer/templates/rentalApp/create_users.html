@@ -1,0 +1,182 @@
+{% extends "../base.html" %}
+
+{% block title %}Create Users{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between mb-4">
+
+    <div>
+        <h2>Create Users</h2>
+        <p class="text-muted">
+            Demonstrates gRPC client-side streaming.
+        </p>
+    </div>
+
+</div>
+
+
+<form method="post" id="userForm">
+
+    {% csrf_token %}
+
+    <input
+        type="hidden"
+        name="user_count"
+        id="userCount"
+        value="2"
+    >
+
+
+    <div id="usersContainer">
+
+        {% for number in "12" %}
+
+        <div class="card shadow-sm mb-3 user-block">
+
+            <div class="card-header bg-white">
+                <strong>
+                    User {{ forloop.counter }}
+                </strong>
+            </div>
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            Name
+                        </label>
+
+                        <input
+                            class="form-control"
+                            name="name_{{ forloop.counter }}"
+                        >
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            class="form-control"
+                            name="email_{{ forloop.counter }}"
+                        >
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Role
+                        </label>
+
+                        <select
+                            class="form-select"
+                            name="role_{{ forloop.counter }}"
+                        >
+
+                            <option value="">
+                                Select
+                            </option>
+
+                            <option value="HOST">
+                                Host
+                            </option>
+
+                            <option value="GUEST">
+                                Guest
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Region
+                        </label>
+
+                        <input
+                            class="form-control"
+                            name="region_{{ forloop.counter }}"
+                        >
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <button
+        type="submit"
+        class="btn btn-primary"
+    >
+        Stream Users to Service
+    </button>
+
+</form>
+
+
+{% if response %}
+
+<div class="card shadow-sm mt-4">
+
+    <div class="card-header">
+        Server Response
+    </div>
+
+    <div class="card-body">
+
+        <p>
+            {{ response.message }}
+        </p>
+
+        <table class="table">
+
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% for user in response.created_users %}
+
+                <tr>
+                    <td>{{ user.user_id }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.role }}</td>
+                    <td>{{ user.email }}</td>
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+{% endblock %}
