@@ -18,6 +18,8 @@ OWNER rental_service_user;
 \q #To Quit the shell
 ```
 
+
+
 3. Test the Access to db
 ```shell
 psql -h 127.0.0.1 -U rental_service_user -d rental_service_db
