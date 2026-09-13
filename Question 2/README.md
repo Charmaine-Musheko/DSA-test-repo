@@ -23,4 +23,82 @@ OWNER rental_service_user;
 psql -h 127.0.0.1 -U rental_service_user -d rental_service_db
 ```
 
+4. Load the above Schema which is labelled as schema.sql
+```shell
+psql \
+    -h 127.0.0.1 \
+    -U rental_service_user \
+    -d rental_service_db \
+    -f schema.sql
+```
 
+5. Show tables
+```shell
+123@Rental!
+```
+
+# Final Design
+
+                   DISTRIBUTED SYSTEM
+
+┌───────────────────────────────────────┐
+│ Django rental_web                     │
+│                                       │
+│ rentalApp                             │
+│ templates / views / forms             │
+│                                       │
+│ Django database:                      │
+│ db.sqlite3                            │
+└──────────────────┬────────────────────┘
+                   │
+                   │ gRPC / protobuf
+                   │ localhost:9090
+                   ▼
+┌───────────────────────────────────────┐
+│ Ballerina rental_service             │
+│                                       │
+│ Validation                            │
+│ Business rules                        │
+│ Booking collision detection           │
+│ Price calculation                     │
+│ Rental operations                     │
+└──────────────────┬────────────────────┘
+                   │
+                   │ ballerinax/postgresql
+                   ▼
+┌───────────────────────────────────────┐
+│ PostgreSQL                            │
+│                                       │
+│ rental_service_db                     │
+│                                       │
+│ users                                 │
+│ properties                            │
+│ cart_items                            │
+│ bookings                              │
+└───────────────────────────────────────┘
+
+
+Separately:
+
+┌───────────────────────────────────────┐
+│ Ballerina rental_client CLI          │
+└──────────────────┬────────────────────┘
+                   │
+                   │ gRPC
+                   └──────────────► rental_service
+
+## Proto Usage
+
+                         rental.proto
+                              │
+          ┌───────────────────┼───────────────────┐
+          │                   │                   │
+          ▼                   ▼                   ▼
+  rental_service        rental_client       Django rentalApp
+     Ballerina             Ballerina             Python
+          │
+          │ PostgreSQL
+          ▼
+ rental_service_db
+          │
+          └── rental schema

@@ -2,166 +2,654 @@ syntax = "proto3";
 
 package rental;
 
-// ---------------------------------------------------------------------------
-// Enums
-// ---------------------------------------------------------------------------
+
+// ============================================================================
+// ENUMS
+// ============================================================================
 
 enum PropertyStatus {
+
     PROPERTY_STATUS_UNSPECIFIED = 0;
+
     AVAILABLE = 1;
+
     BOOKED = 2;
+
     UNDER_MAINTENANCE = 3;
+
     DELISTED = 4;
 }
 
+
 enum UserRole {
+
     USER_ROLE_UNSPECIFIED = 0;
+
     HOST = 1;
+
     GUEST = 2;
 }
 
-// ---------------------------------------------------------------------------
-// Core messages
-// ---------------------------------------------------------------------------
+
+// ============================================================================
+// CORE MESSAGES
+// ============================================================================
+
+
+// ----------------------------------------------------------------------------
+// Property
+// ----------------------------------------------------------------------------
 
 message Property {
+
     string property_id = 1;
+
     string host_id = 2;
+
     string name = 3;
-    string location = 4;                // e.g. "Swakopmund, Erongo"
-    string region = 5;                  // e.g. "Erongo"
-    string property_type = 6;           // e.g. "Apartment", "Villa"
+
+    // Example:
+    // "Swakopmund, Erongo"
+    string location = 4;
+
+    // Example:
+    // "Erongo"
+    string region = 5;
+
+    // Example:
+    // "Apartment", "Villa", "Lodge"
+    string property_type = 6;
+
     double price_per_night = 7;
+
     PropertyStatus status = 8;
+
     string description = 9;
 }
 
+
+// ----------------------------------------------------------------------------
+// User
+// ----------------------------------------------------------------------------
+
 message User {
+
+    // When creating a new user, this may be left blank.
+    //
+    // The Ballerina/PostgreSQL service will generate IDs such as:
+    //
+    // USR-0001
+    // USR-0002
+    // USR-0003
+    //
     string user_id = 1;
+
     string name = 2;
+
     string email = 3;
+
     UserRole role = 4;
-    string region = 5;                  // for hosts: their operating region
+
+    // Mainly useful for hosts.
+    string region = 5;
 }
 
+
+// ----------------------------------------------------------------------------
+// Date Range
+// ----------------------------------------------------------------------------
+
 message DateRange {
-    string check_in = 1;                // ISO yyyy-mm-dd
+
+    // ISO format:
+    // YYYY-MM-DD
+    string check_in = 1;
+
     string check_out = 2;
 }
 
+
+// ----------------------------------------------------------------------------
+// Booking
+// ----------------------------------------------------------------------------
+
 message Booking {
+
     string booking_id = 1;
+
     string property_id = 2;
+
     string guest_id = 3;
+
     DateRange dates = 4;
+
     double total_cost = 5;
-    string status = 6;                  // CONFIRMED, CANCELLED
+
+    // Examples:
+    //
+    // CONFIRMED
+    // CANCELLED
+    string status = 6;
 }
 
-// ---------------------------------------------------------------------------
-// Request / response wrappers
-// ---------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// Removed Booking
+//
+// This is deliberately separate from Booking because it represents audit
+// history.
+//
+// The original booking is retained together with:
+//   - why it was removed
+//   - when it was removed
+// ----------------------------------------------------------------------------
+
+message RemovedBooking {
+
+    Booking booking = 1;
+
+    string reason = 2;
+
+    string removed_at = 3;
+}
+
+
+// ============================================================================
+// PROPERTY REQUEST / RESPONSE MESSAGES
+// ============================================================================
+
+
+// ----------------------------------------------------------------------------
+// Add Property
+// ----------------------------------------------------------------------------
 
 message AddPropertyRequest {
+
     string host_id = 1;
+
     string name = 2;
+
     string location = 3;
+
     string region = 4;
+
     string property_type = 5;
+
     double price_per_night = 6;
+
     string description = 7;
 }
 
+
 message AddPropertyResponse {
+
     string property_id = 1;
+
     bool success = 2;
+
     string message = 3;
 }
 
-message CreateUsersResponse {
-    int32 created_count = 1;
-    string message = 2;
-}
+
+// ----------------------------------------------------------------------------
+// Update Property
+// ----------------------------------------------------------------------------
 
 message UpdatePropertyRequest {
+
     string property_id = 1;
+
     optional double price_per_night = 2;
+
     optional PropertyStatus status = 3;
+
     optional string description = 4;
 }
 
+
 message UpdatePropertyResponse {
+
     bool success = 1;
+
     string message = 2;
+
     Property property = 3;
 }
 
+
+// ----------------------------------------------------------------------------
+// Remove Property
+// ----------------------------------------------------------------------------
+
 message RemovePropertyRequest {
+
     string property_id = 1;
 }
 
+
 message RemovePropertyResponse {
+
     bool success = 1;
+
     string message = 2;
+
+    // Preserve your existing requirement:
+    //
+    // After removing a property, return the remaining available
+    // properties within the same region.
     repeated Property remaining_properties = 3;
 }
 
+
+// ----------------------------------------------------------------------------
+// List Available Properties
+// ----------------------------------------------------------------------------
+
 message ListAvailableRequest {
-    string location_filter = 1;         // optional
-    double min_price = 2;               // 0 = no lower bound
-    double max_price = 3;               // 0 = no upper bound
+
+    // Optional.
+    //
+    // Empty = no location filter.
+    string location_filter = 1;
+
+    // 0 = no lower bound.
+    double min_price = 2;
+
+    // 0 = no upper bound.
+    double max_price = 3;
 }
 
+
+// ----------------------------------------------------------------------------
+// Search Property
+// ----------------------------------------------------------------------------
+
 message SearchPropertyRequest {
+
     string property_id = 1;
 }
 
+
 message SearchPropertyResponse {
+
     bool available = 1;
+
     string message = 2;
+
     Property property = 3;
 }
 
+
+// ============================================================================
+// USER REQUEST / RESPONSE MESSAGES
+// ============================================================================
+
+
+// ----------------------------------------------------------------------------
+// Create Users
+//
+// Used by the CLIENT-SIDE STREAMING RPC.
+//
+// The service now returns the actual users that were created so that
+// callers can see their automatically generated IDs.
+// ----------------------------------------------------------------------------
+
+message CreateUsersResponse {
+
+    int32 created_count = 1;
+
+    string message = 2;
+
+    repeated User created_users = 3;
+}
+
+
+// ----------------------------------------------------------------------------
+// List Users
+//
+// USER_ROLE_UNSPECIFIED:
+//      Return everyone.
+//
+// HOST:
+//      Hosts only.
+//
+// GUEST:
+//      Guests only.
+// ----------------------------------------------------------------------------
+
+message ListUsersRequest {
+
+    UserRole role_filter = 1;
+}
+
+
+// ----------------------------------------------------------------------------
+// Search User
+// ----------------------------------------------------------------------------
+
+message SearchUserRequest {
+
+    string user_id = 1;
+}
+
+
+message SearchUserResponse {
+
+    bool found = 1;
+
+    string message = 2;
+
+    User user = 3;
+}
+
+
+// ============================================================================
+// CART / BOOKING REQUEST / RESPONSE MESSAGES
+// ============================================================================
+
+
+// ----------------------------------------------------------------------------
+// Add Property to Cart
+// ----------------------------------------------------------------------------
+
 message BookPropertyRequest {
+
     string guest_id = 1;
+
     string property_id = 2;
+
     DateRange dates = 3;
 }
 
+
 message BookPropertyResponse {
+
     bool success = 1;
+
     string message = 2;
+
     string cart_id = 3;
+
     double estimated_cost = 4;
 }
 
+
+// ----------------------------------------------------------------------------
+// Confirm Booking
+// ----------------------------------------------------------------------------
+
 message ConfirmBookingRequest {
+
     string guest_id = 1;
+
     string cart_id = 2;
 }
 
+
 message ConfirmBookingResponse {
+
     bool success = 1;
+
     string message = 2;
+
     Booking booking = 3;
 }
 
-// ---------------------------------------------------------------------------
-// Service
-// ---------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// List Active Bookings
+//
+// Both filters are optional.
+//
+// Empty guest_id:
+//      all guests.
+//
+// Empty property_id:
+//      all properties.
+// ----------------------------------------------------------------------------
+
+message ListBookingsRequest {
+
+    string guest_id = 1;
+
+    string property_id = 2;
+}
+
+
+// ----------------------------------------------------------------------------
+// Search Booking
+//
+// Search both:
+//
+// 1. active bookings
+// 2. removed booking history
+// ----------------------------------------------------------------------------
+
+message SearchBookingRequest {
+
+    string booking_id = 1;
+}
+
+
+message SearchBookingResponse {
+
+    // True when the booking was found either in the active table
+    // or removed history.
+    bool found = 1;
+
+
+    // False:
+    //      booking exists in the active bookings table.
+    //
+    // True:
+    //      booking exists in removed_bookings.
+    bool removed = 2;
+
+
+    string message = 3;
+
+
+    // Populated for an active booking.
+    Booking booking = 4;
+
+
+    // Populated when removed == true.
+    RemovedBooking removed_booking = 5;
+}
+
+
+// ----------------------------------------------------------------------------
+// Remove Booking
+//
+// "Remove" means:
+//      move from active bookings to removed booking history.
+//
+// The original record must not simply disappear.
+// ----------------------------------------------------------------------------
+
+message RemoveBookingRequest {
+
+    string booking_id = 1;
+
+    string reason = 2;
+}
+
+
+message RemoveBookingResponse {
+
+    bool success = 1;
+
+    string message = 2;
+
+    RemovedBooking removed_booking = 3;
+}
+
+
+// ----------------------------------------------------------------------------
+// List Removed Bookings
+//
+// Optional guest/property filters.
+// ----------------------------------------------------------------------------
+
+message ListRemovedBookingsRequest {
+
+    string guest_id = 1;
+
+    string property_id = 2;
+}
+
+
+// ============================================================================
+// RENTAL SERVICE
+// ============================================================================
 
 service RentalService {
-    // Simple RPCs
-    rpc AddProperty        (AddPropertyRequest)        returns (AddPropertyResponse);
-    rpc UpdateProperty     (UpdatePropertyRequest)     returns (UpdatePropertyResponse);
-    rpc RemoveProperty     (RemovePropertyRequest)     returns (RemovePropertyResponse);
-    rpc SearchProperty     (SearchPropertyRequest)     returns (SearchPropertyResponse);
-    rpc BookProperty       (BookPropertyRequest)       returns (BookPropertyResponse);
-    rpc ConfirmBooking     (ConfirmBookingRequest)     returns (ConfirmBookingResponse);
 
-    // Client-side streaming
-    rpc CreateUsers        (stream User)               returns (CreateUsersResponse);
 
-    // Server-side streaming
-    rpc ListAvailableProperties (ListAvailableRequest) returns (stream Property);
+    // ========================================================================
+    // SIMPLE RPCs
+    // ========================================================================
+
+
+    // ------------------------------------------------------------------------
+    // Property management
+    // ------------------------------------------------------------------------
+
+    rpc AddProperty (
+        AddPropertyRequest
+    ) returns (
+        AddPropertyResponse
+    );
+
+
+    rpc UpdateProperty (
+        UpdatePropertyRequest
+    ) returns (
+        UpdatePropertyResponse
+    );
+
+
+    rpc RemoveProperty (
+        RemovePropertyRequest
+    ) returns (
+        RemovePropertyResponse
+    );
+
+
+    rpc SearchProperty (
+        SearchPropertyRequest
+    ) returns (
+        SearchPropertyResponse
+    );
+
+
+    // ------------------------------------------------------------------------
+    // Cart / booking
+    // ------------------------------------------------------------------------
+
+    rpc BookProperty (
+        BookPropertyRequest
+    ) returns (
+        BookPropertyResponse
+    );
+
+
+    rpc ConfirmBooking (
+        ConfirmBookingRequest
+    ) returns (
+        ConfirmBookingResponse
+    );
+
+
+    // ------------------------------------------------------------------------
+    // User lookup
+    // ------------------------------------------------------------------------
+
+    rpc SearchUser (
+        SearchUserRequest
+    ) returns (
+        SearchUserResponse
+    );
+
+
+    // ------------------------------------------------------------------------
+    // Booking lookup / removal
+    // ------------------------------------------------------------------------
+
+    rpc SearchBooking (
+        SearchBookingRequest
+    ) returns (
+        SearchBookingResponse
+    );
+
+
+    rpc RemoveBooking (
+        RemoveBookingRequest
+    ) returns (
+        RemoveBookingResponse
+    );
+
+
+    // ========================================================================
+    // CLIENT-SIDE STREAMING
+    // ========================================================================
+
+    // Client sends many User messages.
+    //
+    // Server returns one CreateUsersResponse after the client completes
+    // the stream.
+    rpc CreateUsers (
+        stream User
+    ) returns (
+        CreateUsersResponse
+    );
+
+
+    // ========================================================================
+    // SERVER-SIDE STREAMING
+    // ========================================================================
+
+
+    // ------------------------------------------------------------------------
+    // Available properties
+    // ------------------------------------------------------------------------
+
+    rpc ListAvailableProperties (
+        ListAvailableRequest
+    ) returns (
+        stream Property
+    );
+
+
+    // ------------------------------------------------------------------------
+    // All users / hosts / guests
+    // ------------------------------------------------------------------------
+
+    rpc ListUsers (
+        ListUsersRequest
+    ) returns (
+        stream User
+    );
+
+
+    // ------------------------------------------------------------------------
+    // Active bookings
+    // ------------------------------------------------------------------------
+
+    rpc ListBookings (
+        ListBookingsRequest
+    ) returns (
+        stream Booking
+    );
+
+
+    // ------------------------------------------------------------------------
+    // Removed booking history
+    // ------------------------------------------------------------------------
+
+    rpc ListRemovedBookings (
+        ListRemovedBookingsRequest
+    ) returns (
+        stream RemovedBooking
+    );
 }
