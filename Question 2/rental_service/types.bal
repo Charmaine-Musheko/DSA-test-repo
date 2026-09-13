@@ -39,3 +39,38 @@ public type CartItem record {|
 public type ServiceError record {|
     string message;
 |};
+
+
+// ============================================================================
+// REMOVED BOOKING HISTORY
+// ============================================================================
+//
+// Removed bookings are not discarded.
+//
+// The original booking information is copied into the PostgreSQL
+// removed_bookings table before the active booking is deleted.
+// ============================================================================
+
+public type RemovedBookingRecord record {|
+
+    readonly string bookingId;
+
+    string propertyId;
+
+    string guestId;
+
+    string checkIn;
+
+    string checkOut;
+
+    decimal totalCost;
+
+    string status;
+
+    string reason;
+
+    string removedAt = "";
+
+|};
+
+
