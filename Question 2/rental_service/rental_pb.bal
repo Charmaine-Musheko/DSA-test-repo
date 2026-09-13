@@ -799,9 +799,14 @@ public type BookPropertyResponse record {|
 |};
 
 public enum PropertyStatus {
-    PROPERTY_STATUS_UNSPECIFIED, AVAILABLE, BOOKED, UNDER_MAINTENANCE, DELISTED
+    PROPERTY_STATUS_UNSPECIFIED, 
+    AVAILABLE, BOOKED, 
+    UNDER_MAINTENANCE, 
+    DELISTED
 }
 
 public enum UserRole {
-    USER_ROLE_UNSPECIFIED, HOST, GUEST
+    USER_ROLE_UNSPECIFIED, 
+    HOST, 
+    GUEST
 }
