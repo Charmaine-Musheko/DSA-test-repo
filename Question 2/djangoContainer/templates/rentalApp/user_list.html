@@ -1,92 +1,152 @@
-{% extends "../base.html" %}
+{% extends "base.html" %}
 
-{% block title %}Users{% endblock %}
+{% block title %}
+Users
+{% endblock %}
 
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-4">
 
-    <div>
-        <h2>Users</h2>
-        <p class="text-muted">
-            Users streamed from the Ballerina service.
-        </p>
+<div class="page-header">
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+
+        <div>
+
+            <h2>
+                <i class="fas fa-users me-2"></i>
+                Rental Users
+            </h2>
+
+            <p>
+                View hosts and guests registered with the rental service.
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <a
+                href="{% url 'rentalApp:user_create' %}"
+                class="btn btn-light"
+            >
+                <i class="fas fa-user-plus me-1"></i>
+                Register Users
+            </a>
+
+            <a
+                href="{% url 'rentalApp:user_search' %}"
+                class="btn btn-dark ms-2"
+            >
+                <i class="fas fa-magnifying-glass me-1"></i>
+                Search
+            </a>
+
+        </div>
+
     </div>
-
-    <a
-        href="{% url 'rentalApp:user_create' %}"
-        class="btn btn-primary"
-    >
-        + Create Users
-    </a>
 
 </div>
 
 
-<form method="get" class="card card-body mb-4">
+<div class="card content-card mb-4">
 
-    <div class="row align-items-end">
+    <div class="card-body">
 
-        <div class="col-md-5">
+        <form method="get">
 
-            <label class="form-label">
-                Role
-            </label>
+            <div class="row align-items-end g-3">
 
-            <select
-                name="role"
-                class="form-select"
-            >
+                <div class="col-md-5">
 
-                <option value="">
-                    All Users
-                </option>
+                    <label class="form-label">
+                        Filter by Role
+                    </label>
 
-                <option
-                    value="HOST"
-                    {% if role == "HOST" %}selected{% endif %}
-                >
-                    Hosts
-                </option>
+                    <select
+                        name="role"
+                        class="form-select"
+                    >
 
-                <option
-                    value="GUEST"
-                    {% if role == "GUEST" %}selected{% endif %}
-                >
-                    Guests
-                </option>
+                        <option value="">
+                            All Users
+                        </option>
 
-            </select>
+                        <option
+                            value="HOST"
+                            {% if role == "HOST" %}
+                                selected
+                            {% endif %}
+                        >
+                            Hosts
+                        </option>
 
-        </div>
+                        <option
+                            value="GUEST"
+                            {% if role == "GUEST" %}
+                                selected
+                            {% endif %}
+                        >
+                            Guests
+                        </option>
 
-        <div class="col-md-3">
+                    </select>
 
-            <button class="btn btn-dark">
-                Filter
-            </button>
+                </div>
 
-        </div>
+
+                <div class="col-md-auto">
+
+                    <button
+                        class="btn btn-primary"
+                        type="submit"
+                    >
+                        <i class="fas fa-filter me-1"></i>
+                        Apply Filter
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
 
     </div>
 
-</form>
+</div>
 
 
 {% if error %}
-<div class="alert alert-danger">
+
+<div class="alert alert-danger shadow-2">
+
+    <i class="fas fa-circle-exclamation me-2"></i>
+
     {{ error }}
+
 </div>
+
 {% endif %}
 
 
-<div class="card shadow-sm">
+<div class="card content-card table-card">
+
+    <div class="card-header card-header-primary py-3">
+
+        <strong>
+            Registered Users
+        </strong>
+
+    </div>
+
 
     <div class="table-responsive">
 
         <table class="table table-hover mb-0">
 
             <thead>
+
                 <tr>
                     <th>User ID</th>
                     <th>Name</th>
@@ -94,29 +154,83 @@
                     <th>Role</th>
                     <th>Region</th>
                 </tr>
+
             </thead>
 
             <tbody>
 
-            {% for user in users %}
+                {% for user in users %}
 
                 <tr>
-                    <td>{{ user.user_id }}</td>
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.role }}</td>
-                    <td>{{ user.region }}</td>
-                </tr>
 
-            {% empty %}
+                    <td>
 
-                <tr>
-                    <td colspan="5" class="text-center py-4">
-                        No users found.
+                        <span class="badge bg-dark id-badge">
+                            {{ user.user_id }}
+                        </span>
+
                     </td>
+
+                    <td>
+                        <strong>
+                            {{ user.name }}
+                        </strong>
+                    </td>
+
+                    <td>
+                        {{ user.email }}
+                    </td>
+
+                    <td>
+
+                        {% if user.role == "HOST" %}
+
+                            <span class="badge bg-primary">
+                                Host
+                            </span>
+
+                        {% elif user.role == "GUEST" %}
+
+                            <span class="badge bg-success">
+                                Guest
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-secondary">
+                                {{ user.role }}
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+                        {{ user.region|default:"-" }}
+                    </td>
+
                 </tr>
 
-            {% endfor %}
+                {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="5"
+                        class="text-center py-5 text-muted"
+                    >
+
+                        <i class="fas fa-users-slash fa-2x mb-3"></i>
+
+                        <div>
+                            No users were returned.
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
 
             </tbody>
 
@@ -126,6 +240,5 @@
 
 </div>
 
+
 {% endblock %}
-
-

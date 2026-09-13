@@ -1,118 +1,176 @@
-{% extends "../base.html" %}
+{% extends "base.html" %}
 
 {% block title %}
-Removed Bookings
+Booking History
 {% endblock %}
 
 {% block content %}
 
-<h2>Removed Booking History</h2>
 
-<p class="text-muted">
-    Historical bookings retained after removal.
-</p>
+<div class="page-header">
 
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
 
-<form method="get" class="card card-body mb-4">
+        <div>
 
-    <div class="row g-3">
+            <h2>
+                <i class="fas fa-clock-rotate-left me-2"></i>
+                Removed Booking History
+            </h2>
 
-        <div class="col-md-5">
-
-            <input
-                name="guest_id"
-                value="{{ guest_id }}"
-                class="form-control"
-                placeholder="Guest ID"
-            >
+            <p>
+                Archived bookings retained after cancellation or removal.
+            </p>
 
         </div>
 
-        <div class="col-md-5">
 
-            <input
-                name="property_id"
-                value="{{ property_id }}"
-                class="form-control"
-                placeholder="Property ID"
-            >
-
-        </div>
-
-        <div class="col-md-2">
-
-            <button class="btn btn-dark w-100">
-                Filter
-            </button>
-
-        </div>
+        <a
+            href="{% url 'rentalApp:booking_list' %}"
+            class="btn btn-light"
+        >
+            <i class="fas fa-calendar-check me-1"></i>
+            Active Bookings
+        </a>
 
     </div>
 
-</form>
+</div>
 
 
-<table class="table table-hover">
+{% if error %}
 
-    <thead>
+<div class="alert alert-danger shadow-2">
 
-        <tr>
-            <th>Booking</th>
-            <th>Property</th>
-            <th>Guest</th>
-            <th>Total</th>
-            <th>Reason</th>
-            <th>Removed</th>
-        </tr>
+    {{ error }}
 
-    </thead>
+</div>
 
-    <tbody>
+{% endif %}
 
-    {% for booking in bookings %}
 
-        <tr>
+<div class="card content-card table-card">
 
-            <td>
-                {{ booking.booking_id }}
-            </td>
+    <div class="card-header card-header-danger py-3">
 
-            <td>
-                {{ booking.property_id }}
-            </td>
+        <strong>
+            Archived Booking Records
+        </strong>
 
-            <td>
-                {{ booking.guest_id }}
-            </td>
+    </div>
 
-            <td>
-                N${{ booking.total_cost|floatformat:2 }}
-            </td>
 
-            <td>
-                {{ booking.reason }}
-            </td>
+    <div class="table-responsive">
 
-            <td>
-                {{ booking.removed_at }}
-            </td>
+        <table class="table table-hover mb-0">
 
-        </tr>
+            <thead>
 
-    {% empty %}
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Property</th>
+                    <th>Guest</th>
+                    <th>Stay</th>
+                    <th>Total</th>
+                    <th>Reason</th>
+                    <th>Removed At</th>
+                </tr>
 
-        <tr>
+            </thead>
 
-            <td colspan="6" class="text-center py-4">
-                No removed bookings.
-            </td>
 
-        </tr>
+            <tbody>
 
-    {% endfor %}
+                {% for booking in bookings %}
 
-    </tbody>
+                <tr>
 
-</table>
+
+                    <td>
+
+                        <span class="badge bg-dark id-badge">
+
+                            {{ booking.booking_id }}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+                        {{ booking.property_id }}
+                    </td>
+
+
+                    <td>
+                        {{ booking.guest_id }}
+                    </td>
+
+
+                    <td>
+
+                        {{ booking.check_in }}
+
+                        <i class="fas fa-arrow-right mx-1 text-muted"></i>
+
+                        {{ booking.check_out }}
+
+                    </td>
+
+
+                    <td>
+
+                        N${{ booking.total_cost|floatformat:2 }}
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="badge bg-danger">
+
+                            {{ booking.reason }}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+                        {{ booking.removed_at }}
+                    </td>
+
+                </tr>
+
+
+                {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        class="text-center py-5 text-muted"
+                    >
+
+                        <i class="fas fa-box-archive fa-3x mb-3"></i>
+
+                        <div>
+                            No removed booking records exist.
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
 
 {% endblock %}

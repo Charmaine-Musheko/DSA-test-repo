@@ -17,21 +17,30 @@
     </title>
 
 
-    <!-- Google Fonts -->
+    <!-- ============================================================= -->
+    <!-- GOOGLE FONTS -->
+    <!-- ============================================================= -->
+
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet"
     >
 
 
-    <!-- Font Awesome -->
+    <!-- ============================================================= -->
+    <!-- FONT AWESOME -->
+    <!-- ============================================================= -->
+
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     >
 
 
-    <!-- MDBootstrap -->
+    <!-- ============================================================= -->
+    <!-- MDBOOTSTRAP -->
+    <!-- ============================================================= -->
+
     <link
         href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/8.2.0/mdb.min.css"
         rel="stylesheet"
@@ -42,48 +51,293 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f5f7fa;
+            background:
+                linear-gradient(
+                    135deg,
+                    #f4f7fb 0%,
+                    #edf2f7 100%
+                );
+            min-height: 100vh;
         }
 
-        /* Floating Island Navbar */
+
+        /* ============================================================
+           NAVBAR
+        ============================================================ */
+
         .island-navbar {
-            margin: 10px;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            margin: 12px;
+            border-radius: 18px;
+            box-shadow:
+                0 8px 25px rgba(0, 0, 0, 0.18);
             overflow: hidden;
+            background:
+                linear-gradient(
+                    135deg,
+                    #212529,
+                    #343a40
+                ) !important;
         }
 
         .island-navbar .navbar-brand {
             font-weight: 600;
+            letter-spacing: 0.3px;
         }
 
         .island-navbar .nav-link {
             font-weight: 400;
+            margin: 0 3px;
+            border-radius: 9px;
+            padding-left: 12px !important;
+            padding-right: 12px !important;
             transition: all 0.2s ease;
         }
 
         .island-navbar .nav-link:hover {
-            color: #ffffff;
+            color: #ffffff !important;
+            background: rgba(255, 255, 255, 0.12);
             transform: translateY(-1px);
+        }
+
+
+        /* ============================================================
+           PAGE HEADER
+        ============================================================ */
+
+        .page-header {
+            background:
+                linear-gradient(
+                    135deg,
+                    #1266f1,
+                    #39c0ed
+                );
+            color: white;
+            border-radius: 18px;
+            padding: 28px;
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 10px 28px rgba(18, 102, 241, 0.25);
+        }
+
+        .page-header h2 {
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .page-header p {
+            margin-bottom: 0;
+            opacity: 0.9;
+        }
+
+
+        /* ============================================================
+           CARDS
+        ============================================================ */
+
+        .content-card {
+            border: 0;
+            border-radius: 16px;
+
+            box-shadow:
+                0 7px 22px rgba(0, 0, 0, 0.09);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .content-card:hover {
+            box-shadow:
+                0 10px 28px rgba(0, 0, 0, 0.13);
+        }
+
+        .action-card {
+            border: 0;
+            border-radius: 16px;
+            height: 100%;
+
+            box-shadow:
+                0 6px 20px rgba(0, 0, 0, 0.10);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .action-card:hover {
+            transform: translateY(-4px);
+
+            box-shadow:
+                0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+
+        /* ============================================================
+           COLOURED CARD HEADERS
+        ============================================================ */
+
+        .card-header-primary {
+            background:
+                linear-gradient(
+                    135deg,
+                    #1266f1,
+                    #3b71ca
+                );
+
+            color: white;
+        }
+
+        .card-header-success {
+            background:
+                linear-gradient(
+                    135deg,
+                    #00b74a,
+                    #14a44d
+                );
+
+            color: white;
+        }
+
+        .card-header-warning {
+            background:
+                linear-gradient(
+                    135deg,
+                    #e4a11b,
+                    #f0ad4e
+                );
+
+            color: white;
+        }
+
+        .card-header-danger {
+            background:
+                linear-gradient(
+                    135deg,
+                    #dc4c64,
+                    #c62828
+                );
+
+            color: white;
+        }
+
+        .card-header-info {
+            background:
+                linear-gradient(
+                    135deg,
+                    #39c0ed,
+                    #0dcaf0
+                );
+
+            color: white;
+        }
+
+        .card-header-dark {
+            background:
+                linear-gradient(
+                    135deg,
+                    #332d2d,
+                    #212529
+                );
+
+            color: white;
+        }
+
+
+        /* ============================================================
+           TABLES
+        ============================================================ */
+
+        .table-card {
+            overflow: hidden;
+        }
+
+        .table thead th {
+            background-color: #f4f6f8;
+            color: #4f4f4f;
+            font-weight: 600;
+            border-bottom: 0;
+            white-space: nowrap;
+        }
+
+        .table tbody tr {
+            vertical-align: middle;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f7faff;
+        }
+
+
+        /* ============================================================
+           FORMS
+        ============================================================ */
+
+        .form-control,
+        .form-select {
+            border-radius: 9px;
+            min-height: 44px;
+        }
+
+        textarea.form-control {
+            min-height: auto;
+        }
+
+        .btn {
+            border-radius: 9px;
+        }
+
+
+        /* ============================================================
+           SMALL INFORMATION BOXES
+        ============================================================ */
+
+        .info-box {
+            border-radius: 14px;
+            padding: 18px;
+            background-color: #f8f9fa;
+
+            box-shadow:
+                inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+        }
+
+        .id-badge {
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+
+
+        /* ============================================================
+           FOOTER
+        ============================================================ */
+
+        .footer {
+            color: #757575;
+            font-size: 0.85rem;
+            padding: 30px 0;
         }
 
     </style>
 
+
+    {% block extra_css %}
+    {% endblock %}
+
 </head>
 
 
-<body class="bg-light">
+<body>
 
 
-<!-- =========================
-     NAVIGATION
-========================= -->
+<!-- ============================================================= -->
+<!-- NAVIGATION -->
+<!-- ============================================================= -->
 
 <nav
-    class="navbar navbar-expand-lg navbar-dark bg-dark island-navbar"
+    class="navbar navbar-expand-lg navbar-dark island-navbar"
 >
 
-    <div class="container">
+    <div class="container-fluid px-4">
 
         <a
             class="navbar-brand"
@@ -94,51 +348,69 @@
         </a>
 
 
-        <div class="navbar-nav">
-
-            <a
-                class="nav-link"
-                href="{% url 'rentalApp:dashboard' %}"
-            >
-                <i class="fas fa-gauge-high me-1"></i>
-                Dashboard
-            </a>
-
-
-            <a
-                class="nav-link"
-                href="{% url 'rentalApp:user_list' %}"
-            >
-                <i class="fas fa-users me-1"></i>
-                Users
-            </a>
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-mdb-collapse-init
+            data-mdb-target="#mainNavbar"
+        >
+            <i class="fas fa-bars"></i>
+        </button>
 
 
-            <a
-                class="nav-link"
-                href="{% url 'rentalApp:property_list' %}"
-            >
-                <i class="fas fa-building me-1"></i>
-                Properties
-            </a>
+        <div
+            class="collapse navbar-collapse"
+            id="mainNavbar"
+        >
+
+            <div class="navbar-nav ms-auto">
 
 
-            <a
-                class="nav-link"
-                href="{% url 'rentalApp:booking_list' %}"
-            >
-                <i class="fas fa-calendar-check me-1"></i>
-                Bookings
-            </a>
+                <a
+                    class="nav-link"
+                    href="{% url 'rentalApp:dashboard' %}"
+                >
+                    <i class="fas fa-gauge-high me-1"></i>
+                    Dashboard
+                </a>
 
 
-            <a
-                class="nav-link"
-                href="{% url 'rentalApp:removed_booking_list' %}"
-            >
-                <i class="fas fa-clock-rotate-left me-1"></i>
-                Booking History
-            </a>
+                <a
+                    class="nav-link"
+                    href="{% url 'rentalApp:user_list' %}"
+                >
+                    <i class="fas fa-users me-1"></i>
+                    Users
+                </a>
+
+
+                <a
+                    class="nav-link"
+                    href="{% url 'rentalApp:property_list' %}"
+                >
+                    <i class="fas fa-building me-1"></i>
+                    Properties
+                </a>
+
+
+                <a
+                    class="nav-link"
+                    href="{% url 'rentalApp:booking_list' %}"
+                >
+                    <i class="fas fa-calendar-check me-1"></i>
+                    Bookings
+                </a>
+
+
+                <a
+                    class="nav-link"
+                    href="{% url 'rentalApp:removed_booking_list' %}"
+                >
+                    <i class="fas fa-clock-rotate-left me-1"></i>
+                    History
+                </a>
+
+            </div>
 
         </div>
 
@@ -147,30 +419,52 @@
 </nav>
 
 
-<!-- =========================
-     MAIN CONTENT
-========================= -->
+<!-- ============================================================= -->
+<!-- MAIN CONTENT -->
+<!-- ============================================================= -->
 
 <div class="container py-4">
 
 
-    <!-- Django Messages -->
+    <!-- ========================================================= -->
+    <!-- DJANGO MESSAGES -->
+    <!-- ========================================================= -->
 
     {% if messages %}
 
         {% for message in messages %}
 
             <div
-                class="alert
-                {% if message.tags == 'error' %}
-                    alert-danger
-                {% else %}
-                    alert-{{ message.tags }}
-                {% endif %}"
+                class="
+                    alert
+                    shadow-2
+                    rounded-4
+                    {% if message.tags == 'error' %}
+                        alert-danger
+                    {% else %}
+                        alert-{{ message.tags }}
+                    {% endif %}
+                "
                 role="alert"
             >
 
-                <i class="fas fa-circle-info me-2"></i>
+                {% if message.tags == "success" %}
+
+                    <i class="fas fa-circle-check me-2"></i>
+
+                {% elif message.tags == "warning" %}
+
+                    <i class="fas fa-triangle-exclamation me-2"></i>
+
+                {% elif message.tags == "error" %}
+
+                    <i class="fas fa-circle-exclamation me-2"></i>
+
+                {% else %}
+
+                    <i class="fas fa-circle-info me-2"></i>
+
+                {% endif %}
 
                 {{ message }}
 
@@ -181,23 +475,40 @@
     {% endif %}
 
 
-    <!-- Page Content -->
-
     {% block content %}
     {% endblock %}
 
 
+    <div class="footer text-center">
+
+        <i class="fas fa-network-wired me-1"></i>
+
+        PHOENIX DSA GROUP<BR/>
+        <i class="fas fa-arrow-right mx-1"></i>
+        Mr. T Ndhlovu (218122187)
+        <i class="fas fa-arrow-right mx-1"></i>
+        Mr. T Ndhlovu (218122187) |
+        Mr. T Ndhlovu (218122187)
+        <i class="fas fa-arrow-right mx-1"></i>
+        Mr. T Ndhlovu (218122187)
+
+    </div>
+
 </div>
 
 
-<!-- =========================
-     MDBOOTSTRAP JAVASCRIPT
-========================= -->
+<!-- ============================================================= -->
+<!-- MDBOOTSTRAP JAVASCRIPT -->
+<!-- ============================================================= -->
 
 <script
     type="text/javascript"
     src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/8.2.0/mdb.umd.min.js"
 ></script>
+
+
+{% block extra_js %}
+{% endblock %}
 
 
 </body>

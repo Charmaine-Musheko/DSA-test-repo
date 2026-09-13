@@ -1,4 +1,4 @@
-{% extends "../base.html" %}
+{% extends "base.html" %}
 
 {% block title %}
 Book Property
@@ -6,34 +6,29 @@ Book Property
 
 {% block content %}
 
+
+<div class="page-header">
+
+    <h2>
+        <i class="fas fa-calendar-plus me-2"></i>
+        Book Property
+    </h2>
+
+    <p>
+        Select a guest and an available property. IDs are handled automatically.
+    </p>
+
+</div>
+
+
 <div class="row justify-content-center">
 
-    <div class="col-lg-8">
-
-        <!-- ============================================================= -->
-        <!-- HEADER -->
-        <!-- ============================================================= -->
-
-        <div class="mb-4">
-
-            <h2 class="mb-1">
-                Book Property
-            </h2>
-
-            <p class="text-muted mb-0">
-                Add a property booking request to the guest's cart.
-            </p>
-
-        </div>
+    <div class="col-lg-9">
 
 
-        <!-- ============================================================= -->
-        <!-- BOOKING FORM -->
-        <!-- ============================================================= -->
+        <div class="card content-card">
 
-        <div class="card shadow-sm border-0 mb-4">
-
-            <div class="card-header bg-white py-3">
+            <div class="card-header card-header-info py-3">
 
                 <strong>
                     Booking Details
@@ -44,78 +39,127 @@ Book Property
 
             <div class="card-body p-4">
 
+
+                {% if not guests %}
+
+                <div class="alert alert-warning">
+
+                    No guests are registered.
+
+                    <a
+                        href="{% url 'rentalApp:user_create' %}"
+                        class="alert-link"
+                    >
+                        Register a guest.
+                    </a>
+
+                </div>
+
+                {% endif %}
+
+
+                {% if not properties %}
+
+                <div class="alert alert-warning">
+
+                    No available properties were returned.
+
+                </div>
+
+                {% endif %}
+
+
                 <form method="post">
 
                     {% csrf_token %}
 
 
-                    <!-- GUEST ID -->
+                    <div class="row g-3">
 
-                    <div class="mb-3">
 
-                        <label
-                            for="guest_id"
-                            class="form-label"
-                        >
-                            Guest ID
-                        </label>
+                        <div class="col-md-6">
 
-                        <input
-                            type="text"
-                            id="guest_id"
-                            name="guest_id"
-                            class="form-control"
-                            placeholder="Example: USR-0002"
-                            required
-                        >
+                            <label class="form-label">
+                                Guest
+                            </label>
 
-                        <div class="form-text">
-                            Enter the ID of a user registered as a guest.
+                            <select
+                                name="guest_id"
+                                class="form-select"
+                                required
+                            >
+
+                                <option value="">
+                                    Select registered guest
+                                </option>
+
+                                {% for guest in guests %}
+
+                                <option
+                                    value="{{ guest.user_id }}"
+                                    {% if selected_guest_id == guest.user_id %}
+                                        selected
+                                    {% endif %}
+                                >
+
+                                    {{ guest.name }}
+                                    — {{ guest.user_id }}
+
+                                </option>
+
+                                {% endfor %}
+
+                            </select>
+
                         </div>
 
-                    </div>
 
+                        <div class="col-md-6">
 
-                    <!-- PROPERTY ID -->
+                            <label class="form-label">
+                                Property
+                            </label>
 
-                    <div class="mb-3">
-
-                        <label
-                            for="property_id"
-                            class="form-label"
-                        >
-                            Property ID
-                        </label>
-
-                        <input
-                            type="text"
-                            id="property_id"
-                            name="property_id"
-                            class="form-control"
-                            value="{{ request.GET.property_id }}"
-                            placeholder="Example: PROP-0001"
-                            required
-                        >
-
-                    </div>
-
-
-                    <!-- DATES -->
-
-                    <div class="row">
-
-                        <div class="col-md-6 mb-3">
-
-                            <label
-                                for="check_in"
-                                class="form-label"
+                            <select
+                                name="property_id"
+                                class="form-select"
+                                required
                             >
-                                Check-in Date
+
+                                <option value="">
+                                    Select available property
+                                </option>
+
+                                {% for property in properties %}
+
+                                <option
+                                    value="{{ property.property_id }}"
+                                    {% if selected_property_id == property.property_id %}
+                                        selected
+                                    {% endif %}
+                                >
+
+                                    {{ property.name }}
+                                    — {{ property.location }}
+                                    — N${{ property.price_per_night|floatformat:2 }}
+
+                                </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Check-in
                             </label>
 
                             <input
                                 type="date"
-                                id="check_in"
                                 name="check_in"
                                 class="form-control"
                                 required
@@ -124,18 +168,14 @@ Book Property
                         </div>
 
 
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-6">
 
-                            <label
-                                for="check_out"
-                                class="form-label"
-                            >
-                                Check-out Date
+                            <label class="form-label">
+                                Check-out
                             </label>
 
                             <input
                                 type="date"
-                                id="check_out"
                                 name="check_out"
                                 class="form-control"
                                 required
@@ -146,24 +186,19 @@ Book Property
                     </div>
 
 
-                    <div class="d-flex gap-2">
-
-                        <button
-                            type="submit"
-                            class="btn btn-primary"
-                        >
-                            Add to Cart
-                        </button>
+                    <hr class="my-4">
 
 
-                        <a
-                            href="{% url 'rentalApp:property_list' %}"
-                            class="btn btn-outline-secondary"
-                        >
-                            Cancel
-                        </a>
-
-                    </div>
+                    <button
+                        type="submit"
+                        class="btn btn-info text-white"
+                        {% if not guests or not properties %}
+                            disabled
+                        {% endif %}
+                    >
+                        <i class="fas fa-cart-plus me-1"></i>
+                        Add to Booking Cart
+                    </button>
 
                 </form>
 
@@ -172,94 +207,106 @@ Book Property
         </div>
 
 
-        <!-- ============================================================= -->
-        <!-- Ballerina BookProperty RESPONSE -->
-        <!-- ============================================================= -->
-
         {% if response %}
+
+        <div class="card content-card mt-4">
 
             {% if response.success %}
 
-                <div class="card shadow-sm border-success">
+            <div class="card-header card-header-success py-3">
 
-                    <div class="card-header bg-success text-white">
+                <strong>
+                    <i class="fas fa-circle-check me-2"></i>
+                    Added to Cart
+                </strong>
 
-                        Booking Added to Cart
-
-                    </div>
-
-
-                    <div class="card-body p-4">
-
-                        <p>
-                            {{ response.message }}
-                        </p>
+            </div>
 
 
-                        <div class="row g-3">
+            <div class="card-body p-4">
 
-                            <div class="col-md-6">
 
-                                <small class="text-muted d-block">
-                                    Cart ID
-                                </small>
+                <p>
+                    {{ response.message }}
+                </p>
 
-                                <strong class="fs-5">
+
+                <div class="row g-3">
+
+
+                    <div class="col-md-6">
+
+                        <div class="info-box">
+
+                            <small class="text-muted">
+                                Generated Cart ID
+                            </small>
+
+                            <div class="mt-1">
+
+                                <span class="badge bg-dark id-badge">
                                     {{ response.cart_id }}
-                                </strong>
-
-                            </div>
-
-
-                            <div class="col-md-6">
-
-                                <small class="text-muted d-block">
-                                    Estimated Cost
-                                </small>
-
-                                <strong class="fs-5">
-                                    N${{ response.estimated_cost|floatformat:2 }}
-                                </strong>
+                                </span>
 
                             </div>
 
                         </div>
 
-
-                        <hr>
-
-
-                        <p class="text-muted">
-                            The property has only been added to the cart.
-                            You must confirm the booking before it becomes
-                            a confirmed reservation.
-                        </p>
+                    </div>
 
 
-                        <a
-                            href="{% url 'rentalApp:booking_confirm' %}?cart_id={{ response.cart_id }}"
-                            class="btn btn-success"
-                        >
-                            Confirm Booking
-                        </a>
+                    <div class="col-md-6">
+
+                        <div class="info-box">
+
+                            <small class="text-muted">
+                                Estimated Cost
+                            </small>
+
+                            <div class="fw-bold fs-5 text-success">
+
+                                N${{ response.estimated_cost|floatformat:2 }}
+
+                            </div>
+
+                        </div>
 
                     </div>
 
                 </div>
 
+
+                <a
+                    href="{% url 'rentalApp:booking_confirm' %}?cart_id={{ response.cart_id }}&guest_id={{ response.guest_id }}"
+                    class="btn btn-success mt-4"
+                >
+                    <i class="fas fa-check me-1"></i>
+                    Confirm Booking
+                </a>
+
+            </div>
+
+
             {% else %}
 
-                <div class="alert alert-danger">
+            <div class="card-header card-header-danger py-3">
 
-                    <h6 class="alert-heading">
-                        Booking Failed
-                    </h6>
+                <strong>
+                    Booking Failed
+                </strong>
 
-                    {{ response.message }}
+            </div>
 
-                </div>
+
+            <div class="card-body">
+
+                {{ response.message }}
+
+            </div>
 
             {% endif %}
+
+        </div>
 
         {% endif %}
 
@@ -267,5 +314,5 @@ Book Property
 
 </div>
 
-{% endblock %}
 
+{% endblock %}

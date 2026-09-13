@@ -1,47 +1,144 @@
-{% extends "../base.html" %}
+{% extends "base.html" %}
 
-{% block title %}Remove Booking{% endblock %}
+{% block title %}
+Cancel Booking
+{% endblock %}
 
 {% block content %}
 
+
+<div class="page-header">
+
+    <h2>
+        <i class="fas fa-ban me-2"></i>
+        Cancel Booking
+    </h2>
+
+    <p>
+        The booking will be archived before being removed from active bookings.
+    </p>
+
+</div>
+
+
+{% if booking %}
+
+
 <div class="row justify-content-center">
 
-    <div class="col-lg-7">
+    <div class="col-lg-8">
 
-        <div class="card shadow-sm">
+
+        <div class="card content-card">
+
+            <div class="card-header card-header-danger py-3">
+
+                <strong>
+                    Confirm Booking Cancellation
+                </strong>
+
+            </div>
+
 
             <div class="card-body p-4">
 
-                <h3>Remove Booking</h3>
 
-                <p class="text-muted">
-                    The booking will be archived rather than permanently lost.
-                </p>
+                <span class="badge bg-dark id-badge mb-3">
+
+                    {{ booking.booking_id }}
+
+                </span>
+
+
+                <div class="row g-3 mb-4">
+
+
+                    <div class="col-md-6">
+
+                        <div class="info-box">
+
+                            <small class="text-muted">
+                                Property
+                            </small>
+
+                            <div>
+                                {{ booking.property_id }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <div class="info-box">
+
+                            <small class="text-muted">
+                                Guest
+                            </small>
+
+                            <div>
+                                {{ booking.guest_id }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <div class="info-box">
+
+                            <small class="text-muted">
+                                Check-in
+                            </small>
+
+                            <div>
+                                {{ booking.check_in }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <div class="info-box">
+
+                            <small class="text-muted">
+                                Check-out
+                            </small>
+
+                            <div>
+                                {{ booking.check_out }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
 
                 <form method="post">
 
                     {% csrf_token %}
 
-                    <div class="mb-3">
+
+                    <input
+                        type="hidden"
+                        name="booking_id"
+                        value="{{ booking.booking_id }}"
+                    >
+
+
+                    <div class="mb-4">
 
                         <label class="form-label">
-                            Booking ID
-                        </label>
-
-                        <input
-                            name="booking_id"
-                            class="form-control"
-                            placeholder="BKG-0001"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="mb-3">
-
-                        <label class="form-label">
-                            Reason
+                            Cancellation Reason
                         </label>
 
                         <textarea
@@ -49,14 +146,27 @@
                             class="form-control"
                             rows="4"
                             required
+                            placeholder="Explain why this booking is being cancelled..."
                         ></textarea>
 
                     </div>
 
 
-                    <button class="btn btn-danger">
-                        Remove and Archive
+                    <button
+                        type="submit"
+                        class="btn btn-danger"
+                    >
+                        <i class="fas fa-ban me-1"></i>
+                        Cancel and Archive
                     </button>
+
+
+                    <a
+                        href="{% url 'rentalApp:booking_list' %}"
+                        class="btn btn-light ms-2"
+                    >
+                        Keep Booking
+                    </a>
 
                 </form>
 
@@ -64,21 +174,70 @@
 
         </div>
 
+    </div>
 
-        {% if removed %}
+</div>
 
-        <div class="alert alert-success mt-4">
+
+{% elif removed %}
+
+
+<div class="card content-card">
+
+    <div class="card-header card-header-success py-3">
+
+        <strong>
+            Booking Archived Successfully
+        </strong>
+
+    </div>
+
+
+    <div class="card-body p-4">
+
+        <p>
 
             Booking
-            <strong>{{ removed.booking_id }}</strong>
-            was archived successfully.
 
-        </div>
+            <span class="badge bg-dark id-badge">
 
-        {% endif %}
+                {{ removed.booking_id }}
+
+            </span>
+
+            was successfully moved to booking history.
+
+        </p>
+
+
+        <a
+            href="{% url 'rentalApp:removed_booking_list' %}"
+            class="btn btn-primary"
+        >
+            View Booking History
+        </a>
 
     </div>
 
 </div>
+
+
+{% else %}
+
+<div class="alert alert-warning shadow-2">
+
+    No active booking was selected.
+
+    <a
+        href="{% url 'rentalApp:booking_list' %}"
+        class="alert-link"
+    >
+        Return to active bookings.
+    </a>
+
+</div>
+
+{% endif %}
+
 
 {% endblock %}

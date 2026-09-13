@@ -1,112 +1,164 @@
-{% extends "../base.html" %}
+{% extends "base.html" %}
 
-{% block title %}Create Users{% endblock %}
+{% block title %}
+Create Users
+{% endblock %}
 
 {% block content %}
 
-<div class="d-flex justify-content-between mb-4">
 
-    <div>
-        <h2>Create Users</h2>
-        <p class="text-muted">
-            Demonstrates gRPC client-side streaming.
-        </p>
-    </div>
+<div class="page-header">
+
+    <h2>
+        <i class="fas fa-user-plus me-2"></i>
+        Register Users
+    </h2>
+
+    <p>
+        Create hosts and guests using the gRPC client-streaming service.
+        User IDs are generated automatically.
+    </p>
 
 </div>
 
 
-<form method="post" id="userForm">
+<div class="card content-card">
 
-    {% csrf_token %}
+    <div class="card-header card-header-primary py-3">
 
-    <input
-        type="hidden"
-        name="user_count"
-        id="userCount"
-        value="2"
-    >
+        <div class="d-flex justify-content-between align-items-center">
 
-
-    <div id="usersContainer">
-
-        {% for number in "12" %}
-
-        <div class="card shadow-sm mb-3 user-block">
-
-            <div class="card-header bg-white">
-                <strong>
-                    User {{ forloop.counter }}
-                </strong>
-            </div>
-
-            <div class="card-body">
-
-                <div class="row g-3">
-
-                    <div class="col-md-6">
-                        <label class="form-label">
-                            Name
-                        </label>
-
-                        <input
-                            class="form-control"
-                            name="name_{{ forloop.counter }}"
-                        >
-                    </div>
+            <strong>
+                <i class="fas fa-users me-2"></i>
+                New Users
+            </strong>
 
 
-                    <div class="col-md-6">
-                        <label class="form-label">
-                            Email
-                        </label>
+            <button
+                type="button"
+                id="addUserButton"
+                class="btn btn-light btn-sm"
+            >
+                <i class="fas fa-plus me-1"></i>
+                Add Another User
+            </button>
 
-                        <input
-                            type="email"
-                            class="form-control"
-                            name="email_{{ forloop.counter }}"
-                        >
-                    </div>
+        </div>
+
+    </div>
 
 
-                    <div class="col-md-6">
+    <div class="card-body p-4">
 
-                        <label class="form-label">
-                            Role
-                        </label>
+        <form method="post">
 
-                        <select
-                            class="form-select"
-                            name="role_{{ forloop.counter }}"
-                        >
+            {% csrf_token %}
 
-                            <option value="">
-                                Select
-                            </option>
 
-                            <option value="HOST">
-                                Host
-                            </option>
+            <input
+                type="hidden"
+                name="user_count"
+                id="userCount"
+                value="1"
+            >
 
-                            <option value="GUEST">
-                                Guest
-                            </option>
 
-                        </select>
+            <div id="usersContainer">
+
+
+                <div
+                    class="user-entry border rounded-4 p-4 mb-3 bg-light"
+                    data-user-number="1"
+                >
+
+                    <div class="d-flex justify-content-between mb-3">
+
+                        <strong>
+                            <i class="fas fa-user me-1"></i>
+                            User 1
+                        </strong>
 
                     </div>
 
 
-                    <div class="col-md-6">
+                    <div class="row g-3">
 
-                        <label class="form-label">
-                            Region
-                        </label>
 
-                        <input
-                            class="form-control"
-                            name="region_{{ forloop.counter }}"
-                        >
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Full Name
+                            </label>
+
+                            <input
+                                type="text"
+                                name="name_1"
+                                class="form-control"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Email Address
+                            </label>
+
+                            <input
+                                type="email"
+                                name="email_1"
+                                class="form-control"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Role
+                            </label>
+
+                            <select
+                                name="role_1"
+                                class="form-select"
+                                required
+                            >
+
+                                <option value="">
+                                    Select role
+                                </option>
+
+                                <option value="HOST">
+                                    Host
+                                </option>
+
+                                <option value="GUEST">
+                                    Guest
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Region
+                            </label>
+
+                            <input
+                                type="text"
+                                name="region_1"
+                                class="form-control"
+                                placeholder="Khomas, Erongo..."
+                            >
+
+                        </div>
 
                     </div>
 
@@ -114,30 +166,47 @@
 
             </div>
 
-        </div>
 
-        {% endfor %}
+            <div class="mt-4">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    <i class="fas fa-paper-plane me-2"></i>
+                    Register Users
+                </button>
+
+
+                <a
+                    href="{% url 'rentalApp:user_list' %}"
+                    class="btn btn-light ms-2"
+                >
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
 
     </div>
 
-
-    <button
-        type="submit"
-        class="btn btn-primary"
-    >
-        Stream Users to Service
-    </button>
-
-</form>
+</div>
 
 
 {% if response %}
 
-<div class="card shadow-sm mt-4">
+<div class="card content-card mt-4">
 
-    <div class="card-header">
-        Server Response
+    <div class="card-header card-header-success py-3">
+
+        <strong>
+            <i class="fas fa-circle-check me-2"></i>
+            Registration Result
+        </strong>
+
     </div>
+
 
     <div class="card-body">
 
@@ -145,38 +214,248 @@
             {{ response.message }}
         </p>
 
-        <table class="table">
 
-            <thead>
-                <tr>
-                    <th>User ID</th>
-                    <th>Name</th>
-                    <th>Role</th>
-                    <th>Email</th>
-                </tr>
-            </thead>
+        {% if response.created_users %}
 
-            <tbody>
+        <div class="table-responsive">
 
-            {% for user in response.created_users %}
+            <table class="table table-hover">
 
-                <tr>
-                    <td>{{ user.user_id }}</td>
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.role }}</td>
-                    <td>{{ user.email }}</td>
-                </tr>
+                <thead>
 
-            {% endfor %}
+                    <tr>
+                        <th>Generated ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Region</th>
+                    </tr>
 
-            </tbody>
+                </thead>
 
-        </table>
+                <tbody>
+
+                    {% for user in response.created_users %}
+
+                    <tr>
+
+                        <td>
+
+                            <span class="badge bg-dark id-badge">
+                                {{ user.user_id }}
+                            </span>
+
+                        </td>
+
+                        <td>
+                            {{ user.name }}
+                        </td>
+
+                        <td>
+                            {{ user.email }}
+                        </td>
+
+                        <td>
+
+                            {% if user.role == "HOST" %}
+
+                                <span class="badge bg-primary">
+                                    Host
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-success">
+                                    Guest
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+                            {{ user.region|default:"-" }}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% endif %}
 
     </div>
 
 </div>
 
 {% endif %}
+
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script>
+
+    let userCount = 1;
+
+
+    document
+        .getElementById("addUserButton")
+        .addEventListener(
+            "click",
+            function () {
+
+                userCount++;
+
+                document.getElementById(
+                    "userCount"
+                ).value = userCount;
+
+
+                const container =
+                    document.getElementById(
+                        "usersContainer"
+                    );
+
+
+                const userBlock =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                userBlock.className =
+                    "user-entry border rounded-4 p-4 mb-3 bg-light";
+
+
+                userBlock.innerHTML = `
+
+                    <div class="d-flex justify-content-between mb-3">
+
+                        <strong>
+                            <i class="fas fa-user me-1"></i>
+                            User ${userCount}
+                        </strong>
+
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-outline-danger remove-user"
+                        >
+                            <i class="fas fa-trash"></i>
+                        </button>
+
+                    </div>
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Full Name
+                            </label>
+
+                            <input
+                                type="text"
+                                name="name_${userCount}"
+                                class="form-control"
+                            >
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Email Address
+                            </label>
+
+                            <input
+                                type="email"
+                                name="email_${userCount}"
+                                class="form-control"
+                            >
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Role
+                            </label>
+
+                            <select
+                                name="role_${userCount}"
+                                class="form-select"
+                            >
+
+                                <option value="">
+                                    Select role
+                                </option>
+
+                                <option value="HOST">
+                                    Host
+                                </option>
+
+                                <option value="GUEST">
+                                    Guest
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Region
+                            </label>
+
+                            <input
+                                type="text"
+                                name="region_${userCount}"
+                                class="form-control"
+                            >
+
+                        </div>
+
+                    </div>
+                `;
+
+
+                container.appendChild(
+                    userBlock
+                );
+
+            }
+        );
+
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            if (
+                event.target.closest(
+                    ".remove-user"
+                )
+            ) {
+
+                event
+                    .target
+                    .closest(".user-entry")
+                    .remove();
+
+            }
+
+        }
+    );
+
+</script>
 
 {% endblock %}
