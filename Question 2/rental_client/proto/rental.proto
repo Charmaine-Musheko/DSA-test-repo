@@ -1,0 +1,167 @@
+syntax = "proto3";
+
+package rental;
+
+// ---------------------------------------------------------------------------
+// Enums
+// ---------------------------------------------------------------------------
+
+enum PropertyStatus {
+    PROPERTY_STATUS_UNSPECIFIED = 0;
+    AVAILABLE = 1;
+    BOOKED = 2;
+    UNDER_MAINTENANCE = 3;
+    DELISTED = 4;
+}
+
+enum UserRole {
+    USER_ROLE_UNSPECIFIED = 0;
+    HOST = 1;
+    GUEST = 2;
+}
+
+// ---------------------------------------------------------------------------
+// Core messages
+// ---------------------------------------------------------------------------
+
+message Property {
+    string property_id = 1;
+    string host_id = 2;
+    string name = 3;
+    string location = 4;                // e.g. "Swakopmund, Erongo"
+    string region = 5;                  // e.g. "Erongo"
+    string property_type = 6;           // e.g. "Apartment", "Villa"
+    double price_per_night = 7;
+    PropertyStatus status = 8;
+    string description = 9;
+}
+
+message User {
+    string user_id = 1;
+    string name = 2;
+    string email = 3;
+    UserRole role = 4;
+    string region = 5;                  // for hosts: their operating region
+}
+
+message DateRange {
+    string check_in = 1;                // ISO yyyy-mm-dd
+    string check_out = 2;
+}
+
+message Booking {
+    string booking_id = 1;
+    string property_id = 2;
+    string guest_id = 3;
+    DateRange dates = 4;
+    double total_cost = 5;
+    string status = 6;                  // CONFIRMED, CANCELLED
+}
+
+// ---------------------------------------------------------------------------
+// Request / response wrappers
+// ---------------------------------------------------------------------------
+
+message AddPropertyRequest {
+    string host_id = 1;
+    string name = 2;
+    string location = 3;
+    string region = 4;
+    string property_type = 5;
+    double price_per_night = 6;
+    string description = 7;
+}
+
+message AddPropertyResponse {
+    string property_id = 1;
+    bool success = 2;
+    string message = 3;
+}
+
+message CreateUsersResponse {
+    int32 created_count = 1;
+    string message = 2;
+}
+
+message UpdatePropertyRequest {
+    string property_id = 1;
+    optional double price_per_night = 2;
+    optional PropertyStatus status = 3;
+    optional string description = 4;
+}
+
+message UpdatePropertyResponse {
+    bool success = 1;
+    string message = 2;
+    Property property = 3;
+}
+
+message RemovePropertyRequest {
+    string property_id = 1;
+}
+
+message RemovePropertyResponse {
+    bool success = 1;
+    string message = 2;
+    repeated Property remaining_properties = 3;
+}
+
+message ListAvailableRequest {
+    string location_filter = 1;         // optional
+    double min_price = 2;               // 0 = no lower bound
+    double max_price = 3;               // 0 = no upper bound
+}
+
+message SearchPropertyRequest {
+    string property_id = 1;
+}
+
+message SearchPropertyResponse {
+    bool available = 1;
+    string message = 2;
+    Property property = 3;
+}
+
+message BookPropertyRequest {
+    string guest_id = 1;
+    string property_id = 2;
+    DateRange dates = 3;
+}
+
+message BookPropertyResponse {
+    bool success = 1;
+    string message = 2;
+    string cart_id = 3;
+    double estimated_cost = 4;
+}
+
+message ConfirmBookingRequest {
+    string guest_id = 1;
+    string cart_id = 2;
+}
+
+message ConfirmBookingResponse {
+    bool success = 1;
+    string message = 2;
+    Booking booking = 3;
+}
+
+// ---------------------------------------------------------------------------
+// Service
+// ---------------------------------------------------------------------------
+
+service RentalService {
+    // Simple RPCs
+    rpc AddProperty        (AddPropertyRequest)        returns (AddPropertyResponse);
+    rpc UpdateProperty     (UpdatePropertyRequest)     returns (UpdatePropertyResponse);
+    rpc RemoveProperty     (RemovePropertyRequest)     returns (RemovePropertyResponse);
+    rpc SearchProperty     (SearchPropertyRequest)     returns (SearchPropertyResponse);
+    rpc BookProperty       (BookPropertyRequest)       returns (BookPropertyResponse);
+    rpc ConfirmBooking     (ConfirmBookingRequest)     returns (ConfirmBookingResponse);
+
+    // Client-side streaming
+    rpc CreateUsers        (stream User)               returns (CreateUsersResponse);
+
+    // Server-side streaming
+    rpc ListAvailableProperties (ListAvailableRequest) returns (stream Property);
+}
