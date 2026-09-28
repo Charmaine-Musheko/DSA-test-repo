@@ -76,7 +76,7 @@ message User {
 
     // When creating a new user, this may be left blank.
     //
-    // The Ballerina/PostgreSQL service will generate IDs such as:
+    // The Ballerina service will generate IDs such as:
     //
     // USR-0001
     // USR-0002

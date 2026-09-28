@@ -97,19 +97,4 @@ function init() {
         ]
     });
 
-    // -----------------------------------------------------------------------
-    // Mirror every seeded record into PostgreSQL.
-    //
-    // Order matters: institutions and their sites must be written BEFORE
-    // assets, because assets.institution_name references institutions.name
-    // and assets.(institution_name, site) references institution_sites.
-    // Inserting in the wrong order triggers foreign-key violations that are
-    // swallowed by safePersist* and logged, leaving the DB empty.
-    // -----------------------------------------------------------------------
-    foreach Institution inst in institutions {
-        safePersistInstitution(inst);
-    }
-    foreach Asset a in assetsTable {
-        safePersistAsset(a);
-    }
 }

@@ -1,7 +1,0 @@
-dbHost = "localhost"
-dbPort = 5432
-
-dbUser = "rental_service_user"
-dbPassword = "123@Rental!"
-dbName = "rental_service_db"
-

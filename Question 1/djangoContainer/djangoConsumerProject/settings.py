@@ -70,15 +70,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'djangoConsumerProject.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# Library records live only in the Ballerina map/table data source.
+DATABASES = {}
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
 
 # Password validation

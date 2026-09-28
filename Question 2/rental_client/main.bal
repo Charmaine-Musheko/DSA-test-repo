@@ -8,21 +8,15 @@ import ballerina/grpc;
 //
 // IMPORTANT:
 //
-// This object is NOT the application's persistent storage.
+// This object is only client-side convenience state.
 //
-// Persistent data lives in:
-//
-//      PostgreSQL
-//          ↑
-//      rental_service
-//          ↑ gRPC
-//      this CLI client
+// Application data lives in the rental_service map/table collections and is
+// accessed by this CLI through gRPC.
 //
 // This object only remembers IDs during the current CLI session so that the
 // user does not have to repeatedly type recently generated IDs.
 //
-// If this CLI is restarted, persisted users/properties/bookings can still be
-// retrieved using the List/Search RPC operations.
+// Restarting this CLI keeps server data. Restarting rental_service resets it.
 // =============================================================================
 
 class SessionState {
@@ -58,7 +52,7 @@ public function main() returns error? {
     // -------------------------------------------------------------------------
     // Connect to the Ballerina gRPC rental service.
     //
-    // The CLI does NOT connect directly to PostgreSQL.
+    // The CLI never accesses the tables directly.
     // -------------------------------------------------------------------------
 
     RentalServiceClient rentalClient =
@@ -73,7 +67,7 @@ public function main() returns error? {
     );
 
     io:println(
-        "Persistence: rental_service -> PostgreSQL"
+        "Data source: rental_service -> in-memory tables"
     );
 
     io:println();
@@ -100,7 +94,7 @@ public function main() returns error? {
             );
 
             io:println(
-                "Persistent records remain in PostgreSQL."
+                "Records remain until rental_service is restarted."
             );
 
             io:println(
@@ -212,7 +206,7 @@ function printMenu() {
     );
 
     io:println(
-        "     Search persisted property"
+        "     Search table-backed property"
     );
 
     io:println();
@@ -223,7 +217,7 @@ function printMenu() {
     );
 
     io:println(
-        "     Persist price/status/description changes"
+        "     Update price/status/description in the table"
     );
 
     io:println();
@@ -234,7 +228,7 @@ function printMenu() {
     );
 
     io:println(
-        "     Creates persistent-backed cart request"
+        "     Creates an in-memory cart request"
     );
 
     io:println();
@@ -245,7 +239,7 @@ function printMenu() {
     );
 
     io:println(
-        "     Creates persisted booking"
+        "     Creates an in-memory booking"
     );
 
     io:println();
@@ -278,7 +272,7 @@ function printMenu() {
     );
 
     io:println(
-        "     Not database storage"
+        "     Not server table storage"
     );
 
     io:println();
@@ -300,7 +294,7 @@ function printMenu() {
     );
 
     io:println(
-        "     Search persisted user by ID"
+        "     Search table-backed user by ID"
     );
 
     io:println();
@@ -344,7 +338,7 @@ function printMenu() {
     );
 
     io:println(
-        "     Persistent booking archive"
+        "     In-memory booking archive"
     );
 
 
@@ -532,7 +526,7 @@ function runMenuChoice(
 //
 //      user_id: ""
 //
-// PostgreSQL/Ballerina generates:
+// The Ballerina service generates:
 //
 //      USR-0001
 //      USR-0002
@@ -559,7 +553,7 @@ function createUsersMenu(
     );
 
     io:println(
-        "Client-side streaming + database persistence"
+        "Client-side streaming + table storage"
     );
 
     io:println(
@@ -596,7 +590,7 @@ function createUsersMenu(
 
         // ---------------------------------------------------------------------
         // No User ID prompt.
-        // The database/service generates it.
+        // The service generates it.
         // ---------------------------------------------------------------------
 
         string name =
@@ -732,7 +726,7 @@ function addPropertyMenu(
     );
 
     io:println(
-        "Simple RPC + persistent PostgreSQL insert"
+        "Simple RPC + table insert"
     );
 
     io:println(
@@ -747,7 +741,7 @@ function addPropertyMenu(
     );
 
 
-    // Display persisted hosts before asking the user which host owns
+    // Display registered hosts before asking the user which host owns
     // the property.
 
     stream<User, grpc:Error?> hostStream =
@@ -877,7 +871,7 @@ function listPropertiesMenu(
     );
 
     io:println(
-        "Server-side streaming from persisted records"
+        "Server-side streaming from table records"
     );
 
     io:println(
@@ -1045,7 +1039,7 @@ function updatePropertyMenu(
     );
 
     io:println(
-        "Changes are persisted through rental_service"
+        "Changes are stored in rental_service memory"
     );
 
     io:println(
@@ -1190,7 +1184,7 @@ function bookPropertyMenu(
     );
 
     io:println(
-        "Creates a persisted-backed cart request"
+        "Creates a table-backed cart request"
     );
 
     io:println(
@@ -1347,7 +1341,7 @@ function confirmBookingMenu(
     );
 
     io:println(
-        "Creates a persistent booking record"
+        "Creates a table-backed booking record"
     );
 
     io:println(
@@ -1515,7 +1509,7 @@ function removePropertyMenu(
 //      HOST-001
 //      GUEST-001
 //
-// The database generates the user IDs and those generated IDs are used for the
+// The service generates the user IDs and those generated IDs are used for the
 // remainder of the demonstration.
 // =============================================================================
 
@@ -1530,7 +1524,7 @@ function runEndToEndDemo(
     );
 
     io:println(
-        "9 - COMPLETE END-TO-END DATABASE DEMONSTRATION"
+        "9 - COMPLETE END-TO-END TABLE DEMONSTRATION"
     );
 
     io:println(
@@ -1939,13 +1933,13 @@ function runEndToEndDemo(
 
 
     // =========================================================================
-    // STEP 10 - LIST PERSISTED USERS
+    // STEP 10 - LIST TABLE-BACKED USERS
     // =========================================================================
 
     io:println();
 
     io:println(
-        "STEP 10: Listing persisted users..."
+        "STEP 10: Listing table-backed users..."
     );
 
 
@@ -1961,13 +1955,13 @@ function runEndToEndDemo(
 
 
     // =========================================================================
-    // STEP 11 - LIST PERSISTED BOOKINGS
+    // STEP 11 - LIST TABLE-BACKED BOOKINGS
     // =========================================================================
 
     io:println();
 
     io:println(
-        "STEP 11: Listing persisted active bookings..."
+        "STEP 11: Listing table-backed active bookings..."
     );
 
 
@@ -2014,7 +2008,7 @@ function runEndToEndDemo(
     );
 
     io:println(
-        "END-TO-END DATABASE DEMONSTRATION COMPLETE"
+        "END-TO-END TABLE DEMONSTRATION COMPLETE"
     );
 
     io:println(
@@ -2031,7 +2025,7 @@ function runEndToEndDemo(
     );
 
     io:println(
-        "stored by rental_service in PostgreSQL."
+        "stored by rental_service in memory."
     );
 
 
@@ -2068,11 +2062,11 @@ function showSessionState(
     );
 
     io:println(
-        "This is NOT persistent storage."
+        "This mirrors IDs only for the current CLI session."
     );
 
     io:println(
-        "Persistent records live in PostgreSQL behind rental_service."
+        "Application records live in Ballerina tables behind rental_service."
     );
 
 
@@ -2198,7 +2192,7 @@ function listUsersMenu(
     );
 
     io:println(
-        "11 - VIEW PERSISTED USERS"
+        "11 - VIEW TABLE-BACKED USERS"
     );
 
     io:println(
@@ -2256,7 +2250,7 @@ function listUsersMenu(
     io:println();
 
     io:println(
-        "---------------- DATABASE USERS ----------------"
+        "---------------- TABLE USERS ----------------"
     );
 
 

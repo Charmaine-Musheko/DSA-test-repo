@@ -9,12 +9,12 @@ GRPC_SERVER = "localhost:9090"
 
 def get_stub():
     """
-    Django communicates ONLY with the Ballerina gRPC service.
+    Django communicates only with the Ballerina gRPC service.
 
     Django
         -> gRPC
         -> Ballerina
-        -> PostgreSQL
+        -> in-memory Ballerina tables/maps
     """
 
     channel = grpc.insecure_channel(GRPC_SERVER)

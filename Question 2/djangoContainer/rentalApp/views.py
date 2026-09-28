@@ -211,7 +211,7 @@ def user_create(request):
         role
         region
 
-    Ballerina/PostgreSQL creates IDs such as:
+    Ballerina's in-memory table layer creates IDs such as:
         USR-0001
         USR-0002
         USR-0003
@@ -511,7 +511,7 @@ def property_list(request):
     List/filter available properties.
 
     All data is retrieved from Ballerina through gRPC.
-    Django does not query PostgreSQL directly.
+    Django does not access the service's tables directly.
     """
 
     location_filter = request.GET.get(

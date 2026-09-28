@@ -22,7 +22,6 @@ function handleAddSchedule(string assetTag, Schedule sched) returns Asset|http:N
     }
     a.schedules.push(sched);
     assetsTable.put(a);
-    safePersistAsset(a);
     return a;
 }
 
@@ -53,7 +52,6 @@ function handleUpdateSchedule(string assetTag, string scheduleId, Schedule updat
     }
     a.schedules = newSchedules;
     assetsTable.put(a);
-    safePersistAsset(a);
     return a;
 }
 
@@ -75,7 +73,6 @@ function handleDeleteSchedule(string assetTag, string scheduleId) returns Asset|
     }
     a.schedules = from Schedule s in a.schedules where s.scheduleId != scheduleId select s;
     assetsTable.put(a);
-    safePersistAsset(a);
     return a;
 }
 

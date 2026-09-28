@@ -22,7 +22,6 @@ function handleAddComponent(string assetTag, Component comp) returns Asset|http:
     }
     a.components.push(comp);
     assetsTable.put(a);
-    safePersistAsset(a);
     return a;
 }
 
@@ -43,7 +42,6 @@ function handleDeleteComponent(string assetTag, string compId) returns Asset|htt
     }
     a.components = from Component c in a.components where c.compId != compId select c;
     assetsTable.put(a);
-    safePersistAsset(a);
     return a;
 }
 

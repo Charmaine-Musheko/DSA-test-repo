@@ -16,8 +16,6 @@ function handleCreateAsset(Asset newAsset) returns http:Created|http:Conflict|ht
         return <http:Conflict>{body: <ErrorPayload>{message: string `Asset '${newAsset.assetTag}' already exists`, path: "/library/assets"}};
     }
     assetsTable.add(newAsset);
-    // Mirror the new record into PostgreSQL. Non-fatal: if PG is down, the API still works.
-    safePersistAsset(newAsset);
     return <http:Created>{body: newAsset};
 }
 
@@ -43,8 +41,6 @@ function handleUpdateAsset(string assetTag, Asset updated) returns Asset|http:No
         return <http:BadRequest>{body: <ErrorPayload>{message: "assetTag in payload must match the path"}};
     }
     assetsTable.put(updated);
-    // Overwrite the snapshot in PG; upsert handles both insert and update.
-    safePersistAsset(updated);
     return updated;
 }
 
@@ -53,8 +49,6 @@ function handleDeleteAsset(string assetTag) returns http:Ok|http:NotFound {
         return <http:NotFound>{body: <ErrorPayload>{message: string `Asset '${assetTag}' not found`}};
     }
     _ = assetsTable.remove(assetTag);
-    // Drop the corresponding row in PG as well.
-    safeRemoveAsset(assetTag);
     return <http:Ok>{body: <ErrorPayload>{message: string `Asset '${assetTag}' deleted`}};
 }
 

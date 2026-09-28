@@ -173,7 +173,7 @@ service "RentalService" on ep {
     //
     //      One CreateUsersResponse
     //
-    // registerUser() now writes each user to PostgreSQL.
+    // registerUser() adds each user to usersTable.
     // ------------------------------------------------------------------------
 
     remote function CreateUsers(
@@ -199,10 +199,9 @@ service "RentalService" on ep {
         //      Business/validation failure.
         //
         // error
-        //      PostgreSQL/database failure.
+        //      Unexpected service error.
         //
-        // `check` handles the database error. If PostgreSQL fails, the query
-        // terminates with that error.
+        // `check` propagates unexpected service errors.
         // --------------------------------------------------------------------
 
         error? streamError =
@@ -247,7 +246,7 @@ service "RentalService" on ep {
         // This can represent:
         //
         // - a client stream failure
-        // - a PostgreSQL error propagated by registerUser()
+        // - an error propagated by registerUser()
         // --------------------------------------------------------------------
 
         if streamError is error {
@@ -376,7 +375,7 @@ service "RentalService" on ep {
     // ------------------------------------------------------------------------
     // List Removed Booking History
     //
-    // These records come from PostgreSQL removed_bookings.
+    // These records come from removedBookingsTable.
     // ------------------------------------------------------------------------
 
     remote function ListRemovedBookings(

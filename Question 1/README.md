@@ -2,7 +2,7 @@
 
 This is a simple Ballerina solution for Question 1 of the DSA612S assignment. It has three separate programs:
 
-- `library_service`: the REST API and in-memory data storage
+- `library_service`: the REST API and the only data source: an in-memory Ballerina `table` plus an institution `map`
 - `library_client`: the command-line program used to call the API
 - `library_web`: a modern browser interface that uses the same REST API
 
@@ -84,24 +84,11 @@ The remaining `PUT` and `DELETE` routes for schedules, work orders, tasks, insti
 
 - A Ballerina `record` becomes the shape of a JSON request or response.
 - The `assetsTable` stores data only while the service is running. Restarting the service reloads the sample data.
+- No SQL database is used. All asset operations read and write `assetsTable`; all institution operations use the `institutions` map.
 - `assetTag` is the table key, so two assets cannot use the same tag.
 - Resource functions define the HTTP method and route. Handler functions contain the actual logic.
 - Successful requests return 2xx responses. Invalid input, missing records, and duplicates return 400, 404, or 409 responses.
 - An asset is overdue when it has a `PENDING` schedule whose `dueDate` is before today's date.
 
 Retype the code in your own working branch, test each menu option, and make sure every group member can explain the part they contributed.
-
-
-# Verify Seed data in Psql
-```shell
-PGPASSWORD='123@Librarian!' psql \
-  -h 127.0.0.1 -U library_service_user -d library_service_db \
-  -c "SELECT count(*) FROM institutions;" \
-  -c "SELECT count(*) FROM institution_sites;" \
-  -c "SELECT count(*) FROM assets;" \
-  -c "SELECT count(*) FROM components;" \
-  -c "SELECT count(*) FROM schedules;" \
-  -c "SELECT count(*) FROM work_orders;" \
-  -c "SELECT count(*) FROM work_tasks;"
-```
 

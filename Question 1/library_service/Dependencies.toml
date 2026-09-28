@@ -70,7 +70,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "http"
-version = "2.16.7"
+version = "2.16.8"
 dependencies = [
 	{org = "ballerina", name = "auth"},
 	{org = "ballerina", name = "cache"},
@@ -213,9 +213,6 @@ dependencies = [
 	{org = "ballerina", name = "lang.value"},
 	{org = "ballerina", name = "observe"}
 ]
-modules = [
-	{org = "ballerina", packageName = "log", moduleName = "log"}
-]
 
 [[package]]
 org = "ballerina"
@@ -260,20 +257,6 @@ dependencies = [
 
 [[package]]
 org = "ballerina"
-name = "sql"
-version = "1.19.0"
-dependencies = [
-	{org = "ballerina", name = "io"},
-	{org = "ballerina", name = "jballerina.java"},
-	{org = "ballerina", name = "lang.object"},
-	{org = "ballerina", name = "time"}
-]
-modules = [
-	{org = "ballerina", packageName = "sql", moduleName = "sql"}
-]
-
-[[package]]
-org = "ballerina"
 name = "task"
 version = "2.11.2"
 dependencies = [
@@ -313,62 +296,12 @@ dependencies = [
 ]
 
 [[package]]
-org = "ballerinai"
-name = "observe"
-version = "0.0.0"
-dependencies = [
-	{org = "ballerina", name = "jballerina.java"},
-	{org = "ballerina", name = "observe"}
-]
-
-[[package]]
-org = "ballerinax"
-name = "cdc"
-version = "1.4.0"
-dependencies = [
-	{org = "ballerina", name = "crypto"},
-	{org = "ballerina", name = "data.jsondata"},
-	{org = "ballerina", name = "io"},
-	{org = "ballerina", name = "jballerina.java"},
-	{org = "ballerina", name = "log"},
-	{org = "ballerinai", name = "observe"}
-]
-
-[[package]]
-org = "ballerinax"
-name = "postgresql"
-version = "1.19.1"
-dependencies = [
-	{org = "ballerina", name = "crypto"},
-	{org = "ballerina", name = "io"},
-	{org = "ballerina", name = "jballerina.java"},
-	{org = "ballerina", name = "sql"},
-	{org = "ballerina", name = "time"},
-	{org = "ballerinax", name = "cdc"}
-]
-modules = [
-	{org = "ballerinax", packageName = "postgresql", moduleName = "postgresql"}
-]
-
-[[package]]
-org = "ballerinax"
-name = "postgresql.driver"
-version = "1.7.0"
-modules = [
-	{org = "ballerinax", packageName = "postgresql.driver", moduleName = "postgresql.driver"}
-]
-
-[[package]]
 org = "ministry"
 name = "library_service"
 version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "http"},
-	{org = "ballerina", name = "log"},
-	{org = "ballerina", name = "sql"},
-	{org = "ballerina", name = "time"},
-	{org = "ballerinax", name = "postgresql"},
-	{org = "ballerinax", name = "postgresql.driver"}
+	{org = "ballerina", name = "time"}
 ]
 modules = [
 	{org = "ministry", packageName = "library_service", moduleName = "library_service"}

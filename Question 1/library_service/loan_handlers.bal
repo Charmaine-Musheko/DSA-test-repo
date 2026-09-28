@@ -20,7 +20,6 @@ function handleLoanAsset(string assetTag, LoanRequest req) returns Asset|http:No
         status: "PENDING"
     });
     assetsTable.put(a);
-    safePersistAsset(a);
     return a;
 }
 
@@ -45,7 +44,6 @@ function handleReturnAsset(string assetTag) returns Asset|http:NotFound|http:Con
     }
     a.schedules = updatedSchedules;
     assetsTable.put(a);
-    safePersistAsset(a);
     return a;
 }
 
@@ -69,7 +67,6 @@ function handleBookAsset(string assetTag, BookingRequest req) returns Asset|http
         status: "PENDING"
     });
     assetsTable.put(a);
-    safePersistAsset(a);
     return a;
 }
 
@@ -94,7 +91,6 @@ function handleReleaseAsset(string assetTag) returns Asset|http:NotFound|http:Co
     }
     a.schedules = updatedSchedules;
     assetsTable.put(a);
-    safePersistAsset(a);
     return a;
 }
 

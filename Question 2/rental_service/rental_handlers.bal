@@ -1073,7 +1073,7 @@ function confirmBooking(
         );
 
 
-    // Remove cart only after booking was successfully persisted.
+    // Remove the cart only after the booking was added to bookingsTable.
     check deleteCartItem(
         request.cart_id
     );

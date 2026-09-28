@@ -47,8 +47,8 @@ public type ServiceError record {|
 //
 // Removed bookings are not discarded.
 //
-// The original booking information is copied into the PostgreSQL
-// removed_bookings table before the active booking is deleted.
+// The original booking information is copied into removedBookingsTable
+// before the active booking is deleted from bookingsTable.
 // ============================================================================
 
 public type RemovedBookingRecord record {|

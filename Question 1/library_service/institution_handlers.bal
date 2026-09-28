@@ -20,8 +20,6 @@ function handleAddInstitution(Institution inst) returns http:Created|http:Confli
         return <http:Conflict>{body: <ErrorPayload>{message: string `Institution '${inst.name}' already exists`}};
     }
     institutions[inst.name] = inst;
-    // Mirror the new institution into PG.
-    safePersistInstitution(inst);
     return <http:Created>{body: inst};
 }
 
@@ -37,7 +35,6 @@ function handleDeleteInstitution(string name) returns http:Ok|http:NotFound|http
         };
     }
     _ = institutions.remove(name);
-    safeRemoveInstitution(name);
     return <http:Ok>{body: <ErrorPayload>{message: string `Institution '${name}' removed`}};
 }
 
@@ -55,8 +52,6 @@ function handleAddSite(string name, SiteRequest req) returns Institution|http:No
     }
     inst.sites.push(req.site);
     institutions[name] = inst;
-    // Re-persist the whole institution because sites is stored as a JSONB array.
-    safePersistInstitution(inst);
     return inst;
 }
 
@@ -69,7 +64,6 @@ function handleDeleteSite(string name, string site) returns Institution|http:Not
     // Rebuild the array without the target site.
     inst.sites = from string s in inst.sites where s != site select s;
     institutions[name] = inst;
-    safePersistInstitution(inst);
     return inst;
 }
 

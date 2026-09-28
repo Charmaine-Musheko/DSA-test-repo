@@ -1,130 +1,41 @@
-# POSTGRESQL SETUP
+# Question 2 - Rental Platform
 
+This project is a distributed rental application with a Ballerina gRPC
+service and two clients:
 
-1. Initial Login : 
-```shell
-sudo -u postgres psql
+```text
+Browser -> Django :8000 -> gRPC -> Ballerina :9090 -> map/table storage
+Terminal -> Ballerina CLI --------^
 ```
 
+## Data source
 
-2. Create a dedicated user for the rental service : 
-```shell
-CREATE USER rental_service_user
-WITH PASSWORD '123@Rental!';
+The only application data source is `rental_service/storage.bal`. It defines
+five keyed in-memory tables:
 
-CREATE DATABASE rental_service_db
-OWNER rental_service_user;
+- `usersTable`, keyed by `userId`
+- `propertiesTable`, keyed by `propertyId`
+- `cartItemsTable`, keyed by `cartId`
+- `bookingsTable`, keyed by `bookingId`
+- `removedBookingsTable`, keyed by `bookingId`
 
-\q #To Quit the shell
-```
+No PostgreSQL connection, credentials, schema or SQL queries are required.
+Data remains available while `rental_service` is running and resets when that
+process restarts.
 
+## Main functionality
 
+- Create hosts and guests with client-side streaming
+- Add, update, remove, search and list properties
+- Filter available properties by location and price
+- Create cart requests and confirm bookings
+- Detect overlapping booking dates
+- Calculate the number of nights and total cost
+- Archive cancelled bookings in `removedBookingsTable`
+- Stream users, properties and bookings back to clients
 
-3. Test the Access to db
-```shell
-psql -h 127.0.0.1 -U rental_service_user -d rental_service_db
-```
+The shared `rental.proto` file is the contract for Ballerina, the CLI and
+Django. Generated Protobuf source files should only be regenerated when that
+contract changes.
 
-4. Load the above Schema which is labelled as schema.sql
-```shell
-psql \
-    -h 127.0.0.1 \
-    -U rental_service_user \
-    -d rental_service_db \
-    -f schema.sql
-```
-
-5. Show tables
-```shell
-123@Rental!
-```
-
-# Final Design
-
-                   DISTRIBUTED SYSTEM
-
-┌───────────────────────────────────────┐
-│ Django rental_web                     │
-│                                       │
-│ rentalApp                             │
-│ templates / views / forms             │
-│                                       │
-│ Django database:                      │
-│ db.sqlite3                            │
-└──────────────────┬────────────────────┘
-                   │
-                   │ gRPC / protobuf
-                   │ localhost:9090
-                   ▼
-┌───────────────────────────────────────┐
-│ Ballerina rental_service             │
-│                                       │
-│ Validation                            │
-│ Business rules                        │
-│ Booking collision detection           │
-│ Price calculation                     │
-│ Rental operations                     │
-└──────────────────┬────────────────────┘
-                   │
-                   │ ballerinax/postgresql
-                   ▼
-┌───────────────────────────────────────┐
-│ PostgreSQL                            │
-│                                       │
-│ rental_service_db                     │
-│                                       │
-│ users                                 │
-│ properties                            │
-│ cart_items                            │
-│ bookings                              │
-└───────────────────────────────────────┘
-
-
-Separately:
-
-┌───────────────────────────────────────┐
-│ Ballerina rental_client CLI          │
-└──────────────────┬────────────────────┘
-                   │
-                   │ gRPC
-                   └──────────────► rental_service
-
-## Proto Usage
-
-                         rental.proto
-                              │
-          ┌───────────────────┼───────────────────┐
-          │                   │                   │
-          ▼                   ▼                   ▼
-  rental_service        rental_client       Django rentalApp
-     Ballerina             Ballerina             Python
-          │
-          │ PostgreSQL
-          ▼
- rental_service_db
-          │
-          └── rental schema
-
-## Django Views
-
-Users
- ├── Create users
- ├── View all users
- ├── View hosts only
- ├── View guests only
- └── Search user
-
-Properties
- ├── Add property
- ├── List/filter available properties
- ├── Search property
- ├── Update property
- └── Remove property
-
-Bookings
- ├── Add to cart
- ├── Confirm booking
- ├── View active bookings
- ├── Search active/removed booking
- ├── Remove/archive booking
- └── View removed booking history
+See `SETUP.md` for commands.

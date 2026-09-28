@@ -26,7 +26,6 @@ function handleAddWorkOrder(string assetTag, WorkOrder wo) returns Asset|http:No
         a.status = "UNDER_MAINTENANCE";
     }
     assetsTable.put(a);
-    safePersistAsset(a);
     return a;
 }
 
@@ -66,7 +65,6 @@ function handleUpdateWorkOrder(string assetTag, string orderId, WorkOrder update
         a.status = "AVAILABLE";
     }
     assetsTable.put(a);
-    safePersistAsset(a);
     return a;
 }
 
@@ -87,7 +85,6 @@ function handleDeleteWorkOrder(string assetTag, string orderId) returns Asset|ht
     }
     a.workOrders = from WorkOrder w in a.workOrders where w.orderId != orderId select w;
     assetsTable.put(a);
-    safePersistAsset(a);
     return a;
 }
 
@@ -117,7 +114,6 @@ function handleAddTask(string assetTag, string orderId, WorkTask t) returns Asse
     }
     a.workOrders = newOrders;
     assetsTable.put(a);
-    safePersistAsset(a);
     return a;
 }
 
@@ -153,7 +149,6 @@ function handleUpdateTask(string assetTag, string orderId, string taskId, WorkTa
     }
     a.workOrders = newOrders;
     assetsTable.put(a);
-    safePersistAsset(a);
     return a;
 }
 
@@ -184,7 +179,6 @@ function handleDeleteTask(string assetTag, string orderId, string taskId) return
     }
     a.workOrders = newOrders;
     assetsTable.put(a);
-    safePersistAsset(a);
     return a;
 }
 
